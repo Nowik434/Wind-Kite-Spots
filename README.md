@@ -2,26 +2,26 @@
 
 Wind / Kite Spots is application created for windsurfing and kitesurfing fans. As a networking platform it connects windsurfers and kitesurfers and helps them to gather together on spots.
 
-![Logo](........)
+![Logo](https://github.com/Nowik434/Wind-Kite-Spots/blob/main/Concept/logo.png)
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 
 ## Demo
 
 Register Page
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/Nowik434/Wind-Kite-Spots/blob/main/Concept/Register%20Page.png)
 
 Login Page
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/Nowik434/Wind-Kite-Spots/blob/main/Concept/Login%20Page.png)
 
 Map Page
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/Nowik434/Wind-Kite-Spots/blob/main/Concept/Map.png)
 
 Spots Page
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/Nowik434/Wind-Kite-Spots/blob/main/Concept/Spots.png)
 
 Friends Page
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](https://github.com/Nowik434/Wind-Kite-Spots/blob/main/Concept/Friends.png)
 
 ## Tech Stack
 
