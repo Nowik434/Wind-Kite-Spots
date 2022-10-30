@@ -9,7 +9,7 @@ Wind / Kite Spots is application created for windsurfing and kitesurfing fans. A
 ## Demo
 
 React Native - Main Page
-![App Screenshot](https://github.com/Nowik434/Wind-Kite-Spots/blob/main/Concept/iPhone%main%page.png)
+![App Screenshot](https://github.com/Nowik434/Wind-Kite-Spots/blob/main/Concept/iPhone%20main%20page.png)
 
 Register Page
 ![App Screenshot](https://github.com/Nowik434/Wind-Kite-Spots/blob/main/Concept/Register%20Page.png)
