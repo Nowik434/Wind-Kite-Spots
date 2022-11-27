@@ -12,8 +12,8 @@ const CardComponent = () => (
       <Paragraph>Card content</Paragraph>
     </Card.Content>
     <Card.Actions>
-      <Button>Cancel</Button>
-      <Button>Ok</Button>
+      <Button>More</Button>
+      {/* <Button>Ok</Button> */}
     </Card.Actions>
   </Card>
 );

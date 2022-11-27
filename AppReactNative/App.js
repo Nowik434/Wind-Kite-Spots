@@ -9,45 +9,48 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import MapScreen from "./screens/MapScreen";
 import MessageScreen from "./screens/MessageScreen";
-import { Provider as PaperProvider } from "react-native-paper";
 import BottomNavigationBar from "./components/BottomNavigation";
 import AppBarAction from "./components/AppBarAction";
+import {
+  MD3LightTheme as DefaultTheme,
+  MD3LightTheme,
+  Provider as PaperProvider,
+} from "react-native-paper";
+import { createStackNavigator } from "@react-navigation/stack";
+import MapStack from "./screens/stacks/MapStack";
+
+const theme = {
+  ...DefaultTheme,
+  // Specify custom property
+  myOwnProperty: true,
+  // Specify custom property in nested object
+  colors: {
+    ...MD3LightTheme.colors,
+    primary: "#6FCF97",
+    onPrimary: "rgb(255, 255, 255)",
+    primaryContainer: "rgb(255, 215, 245)",
+    onPrimaryContainer: "rgb(56, 0, 56)",
+    // secondary: "rgb(109, 88, 105)",
+    // onSecondary: "rgb(255, 255, 255)",
+    // secondaryContainer: "rgb(247, 218, 239)",
+    // onSecondaryContainer: "rgb(39, 22, 36)",
+  },
+};
+
+const Stack = createStackNavigator();
 
 export default function App() {
-  // const Stack = createNativeStackNavigator();
-
   return (
     <Provider store={store}>
-      <PaperProvider>
-        <AppBarAction />
-        {/* <NavigationContainer> */}
-        {/* <SafeAreaProvider>
-            <Stack.Navigator initialRouteName="HomeScreen">
-              <Stack.Screen
-                name="HomeScreen"
-                component={HomeScreen}
-                options={{
-                  headerShown: false,
-                }}
-              />
-              <Stack.Screen
-                name="MapScreen"
-                component={MapScreen}
-                options={{
-                  headerShown: false,
-                }}
-              />
-              <Stack.Screen
-                name="MessageScreen"
-                component={MessageScreen}
-                options={{
-                  headerShown: false,
-                }}
-              />
-            </Stack.Navigator>
-          </SafeAreaProvider> */}
-        {/* </NavigationContainer> */}
-        <BottomNavigationBar />
+      <PaperProvider theme={theme}>
+        <NavigationContainer>
+          {/* <Stack.Navigator initialRouteName="WelcomeScreen">
+            <AppBarAction />
+            <Stack.Screen name="Map" component={MapStack} />
+            <Stack.Screen name="TabsBottom" component={BottomNavigationBar} />
+          </Stack.Navigator> */}
+          <BottomNavigationBar />
+        </NavigationContainer>
       </PaperProvider>
     </Provider>
   );

@@ -10,7 +10,7 @@ const SpotsScreen = () => {
   return (
     <>
       <View>
-        <ScrollView style={tw`h-100, p-5`}>
+        <ScrollView style={{ p: 5, marginBottom: 10 }}>
           <CardComponent />
           <CardComponent />
           <CardComponent />

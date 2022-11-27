@@ -20,14 +20,22 @@ import {
   Paragraph,
   IconButton,
 } from "react-native-paper";
+import HomeScreenCard from "../components/HomeScreenCard";
+import AppBarAction from "../components/AppBarAction";
 
-const HomeScreen = () => {
+const Col = ({ numRows, children }) => {
+  return <View style={styles[`${numRows}col`]}>{children}</View>;
+};
+
+const Row = ({ children }) => <View style={styles.row}>{children}</View>;
+
+const HomeScreen = ({ navigation }) => {
   const dispatch = useDispatch();
 
   return (
     <>
       <ScrollView>
-        <View style={tw`p-5`}>
+        <View style={tw`p-3`}>
           <View style={{ marginBottom: 20 }}>
             <Card elevation={5}>
               <Card.Content style={styles.cardHeader}>
@@ -39,38 +47,32 @@ const HomeScreen = () => {
               </Card.Content>
             </Card>
           </View>
-          <View style={styles.container}>
-            <Card>
-              <Card.Cover source={{ uri: "https://picsum.photos/700" }} />
-              <View style={styles.container}>
-                <View
-                  style={{
-                    width: "50%",
-                  }}
-                >
-                  <Card.Content>
-                    <Title>Sopot</Title>
-                    <Paragraph>Card content</Paragraph>
-                  </Card.Content>
-                </View>
-                <View
-                  style={{
-                    width: "50%",
-                    justifyContent: "flex-end",
-                    flexDirection: "row",
-                  }}
-                >
-                  <IconButton
-                    icon="heart"
-                    iconColor={"#6FCF97"}
-                    size={30}
-                    onPress={() => console.log("Pressed")}
-                  />
-                </View>
-              </View>
-            </Card>
-          </View>
-          {/* <Text style={styles.baseText}>Appka</Text> */}
+        </View>
+        <View style={styles.gallery}>
+          <Row>
+            <Col numRows={1}>
+              <HomeScreenCard title="Sopot" subtitle="Best Place" />
+            </Col>
+          </Row>
+          <Row>
+            <Col numRows={1}>
+              <HomeScreenCard title="Sopot" />
+            </Col>
+            <Col numRows={1}>
+              <HomeScreenCard title="Sopot" />
+            </Col>
+            <Col numRows={1}>
+              <HomeScreenCard title="Sopot" />
+            </Col>
+          </Row>
+          <Row>
+            <Col numRows={1}>
+              <HomeScreenCard title="Sopot" subtitle="Best Place" />
+            </Col>
+            <Col numRows={1}>
+              <HomeScreenCard title="Sopot" subtitle="Best Place" />
+            </Col>
+          </Row>
         </View>
       </ScrollView>
     </>
@@ -98,5 +100,37 @@ const styles = StyleSheet.create({
   cardHeader: {
     width: "100%",
     borderRadius: "5px",
+  },
+  row: {
+    flexDirection: "row",
+  },
+  gallery: {
+    marginLeft: 6,
+    marginRight: 6,
+  },
+  "1col": {
+    backgroundColor: "lightblue",
+    borderColor: "#fff",
+    borderWidth: 1,
+    flex: 1,
+    margin: 6,
+  },
+  "2col": {
+    backgroundColor: "green",
+    borderColor: "#fff",
+    borderWidth: 1,
+    flex: 2,
+    margin: 6,
+  },
+  "3col": {
+    backgroundColor: "orange",
+    borderColor: "#fff",
+    borderWidth: 1,
+    flex: 3,
+    margin: 6,
+  },
+  "4col": {
+    flex: 4,
+    margin: 6,
   },
 });

@@ -1,21 +1,29 @@
 import * as React from "react";
-import { List, MD3Colors } from "react-native-paper";
+import { Avatar, List, MD3Colors } from "react-native-paper";
 
-const ListOfFriends = () => (
+const ListOfFriends = ({ list }) => (
   <List.Section>
-    <List.Subheader>Some title</List.Subheader>
-    <List.Item title="First Item" left={() => <List.Icon icon="folder" />} />
-    <List.Item title="First Item" left={() => <List.Icon icon="folder" />} />
-    <List.Item title="First Item" left={() => <List.Icon icon="folder" />} />
-    <List.Item title="First Item" left={() => <List.Icon icon="folder" />} />
-    <List.Item title="First Item" left={() => <List.Icon icon="folder" />} />
-    <List.Item title="First Item" left={() => <List.Icon icon="folder" />} />
-    <List.Item title="First Item" left={() => <List.Icon icon="folder" />} />
-    <List.Item title="First Item" left={() => <List.Icon icon="folder" />} />
-    <List.Item
-      title="Second Item"
-      left={() => <List.Icon color={MD3Colors.tertiary70} icon="folder" />}
-    />
+    {/* <List.Subheader>List of your friends</List.Subheader> */}
+    {list.map((user, index) => (
+      <List.Item
+        key={index}
+        title={user.name}
+        style={{
+          borderBottomColor: "#ececec",
+          borderBottomWidth: 1,
+          marginTop: 10,
+          paddingBottom: 20,
+        }}
+        left={() => (
+          <Avatar.Image
+            size={33}
+            source={require("../assets/avatar.png")}
+            style={{ alignSelf: "center", marginBottom: 0 }}
+          />
+        )}
+        right={() => <List.Icon icon="message" />}
+      />
+    ))}
   </List.Section>
 );
 

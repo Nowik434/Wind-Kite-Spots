@@ -17,7 +17,7 @@ import { GeofencingEventType } from "expo-location";
 import * as TaskManager from "expo-task-manager";
 import { Button } from "react-native-elements";
 
-const MapScreen = () => {
+const MapScreen = ({ navigation }) => {
   const { latitude, longitude } = useSelector(selectCurrentLocation);
   const [errorMsg, setErrorMsg] = useState(null);
 
@@ -36,9 +36,24 @@ const MapScreen = () => {
 
   let [regions, setRegions] = useState([
     {
+      id: "1",
       title: "Test",
       latitude: 59.334591,
       longitude: 18.06324,
+      radius: 100,
+    },
+    {
+      id: "2",
+      title: "Test2",
+      latitude: 58.334591,
+      longitude: 18.06324,
+      radius: 100,
+    },
+    {
+      id: "3",
+      title: "Test3",
+      latitude: 58.334591,
+      longitude: 17.06324,
       radius: 100,
     },
   ]);
@@ -110,7 +125,12 @@ const MapScreen = () => {
   return (
     <View>
       <View style={tw`h-1/1`}>
-        <Map latitude={latitude} longitude={longitude} />
+        <Map
+          latitude={latitude}
+          longitude={longitude}
+          regions={regions}
+          navigation={navigation}
+        />
         <Button
           style="styleButton"
           title="checkRegion()"
