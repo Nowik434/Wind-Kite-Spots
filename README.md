@@ -37,16 +37,30 @@ Friends Page
 Clone the project
 
 ```bash
-  git clone https://link-to-project
+  git clone https://github.com/Nowik434/Wind-Kite-Spots.git
 ```
 
 Go to the project directory
 
+Strapi:
+
 ```bash
-  cd my-project
+  cd Strapi
 ```
 
-Install dependencies
+Web React App:
+
+```bash
+  cd ReactApp
+```
+
+Mobile React Native App:
+
+```bash
+  cd ReactNativeApp
+```
+
+Install dependencies for all folders
 
 ```bash
   npm install
