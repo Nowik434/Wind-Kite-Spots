@@ -21,8 +21,8 @@ function MapCards({ setActive, activeMarker }) {
       elevation={3}
       sx={{
         zIndex: 1,
-        position: "absolute",
-        top: "30px",
+        position: "fixed",
+        top: "93px",
         right: "30px",
         height: "90%",
         maxWidth: "300px",

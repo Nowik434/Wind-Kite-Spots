@@ -4,6 +4,8 @@ import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import { styled } from "@mui/material/styles";
+import { Paper } from "@mui/material";
 
 const footers = [
   {
@@ -17,7 +19,6 @@ const footers = [
   {
     title: "DZIAŁALNOŚĆ",
     description: [
-      { title: "Czym jest ZSK?", url: "https://dev-nowicki.pl/" },
       { title: "Jak uzyskać cośtam?", url: "https://dev-nowicki.pl/" },
     ],
   },
@@ -37,6 +38,14 @@ const footers = [
   },
 ];
 
+const Item = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
+  ...theme.typography.body2,
+  padding: theme.spacing(1),
+  textAlign: "center",
+  color: theme.palette.text.secondary,
+}));
+
 export const Footer = () => {
   return (
     <Box sx={{ bgcolor: "background.paper", p: 6 }} component="footer">
@@ -49,29 +58,15 @@ export const Footer = () => {
           py: [3, 6],
         }}
       >
-        <Grid container spacing={4} justifyContent="space-evenly">
-          {footers.map((footer) => (
-            <Grid item xs={6} sm={3} key={footer.title}>
-              <Typography variant="h6" color="text.primary" gutterBottom>
-                {footer.title}
-              </Typography>
-              <ul style={{ listStyle: "none", paddingLeft: 0 }}>
-                {footer.description.map((item) => (
-                  <li key={item.title}>
-                    <Link
-                      href={item.url}
-                      variant="subtitle1"
-                      color="text.secondary"
-                      style={{ textDecoration: "none" }}
-                    >
-                      {item.title}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </Grid>
-          ))}
-        </Grid>
+        <Box sx={{ flexGrow: 1 }}>
+          <Grid container spacing={2}>
+            {footers.map((footer) => (
+              <Grid item xs={6} sm={3}>
+                <Item elevation={7}>YOUR AD</Item>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
       </Container>
     </Box>
   );

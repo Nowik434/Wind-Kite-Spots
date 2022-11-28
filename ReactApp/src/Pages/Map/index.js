@@ -9,6 +9,7 @@ import { Avatar, Fab, Grid } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { Box } from "@mui/system";
 import MapCards from "../../Components/MapCards";
+import StartActivity from "../../Components/StartActivity";
 
 const GOOGLE_API = process.env.REACT_APP_GOOGLE_MAPS_APIKEY;
 
@@ -36,11 +37,10 @@ const markers = [
 ];
 
 const containerStyle = {
+  position: "fixed",
   width: "100vw",
   height: "100vh",
-  // position: "fixed",
-  // width: "100vw",
-  // height: "100%",
+  overflow: "hidden",
 };
 
 const center = {
@@ -50,6 +50,7 @@ const center = {
 
 function Map({ spots }) {
   const [activeMarker, setActiveMarker] = useState(null);
+  const [activityIsOpened, setActivityIsOpened] = useState(false);
 
   const handleActiveMarker = (marker) => {
     if (marker === activeMarker) {
@@ -81,92 +82,115 @@ function Map({ spots }) {
   }, []);
 
   return isLoaded ? (
-    <GoogleMap
-      mapContainerStyle={containerStyle}
-      center={center}
-      zoom={8}
-      onLoad={onLoad}
-      onUnmount={onUnmount}
-      position="fixed"
-      onClick={() => setActiveMarker(null)}
-    >
-      {spots.map(
-        ({ id, attributes: { name, desc, image, latitude, longitude } }) => (
-          <Marker
-            key={id}
-            position={{ lat: latitude, lng: longitude }}
-            onClick={() => handleActiveMarker(id)}
-          >
-            {activeMarker === id ? (
-              <InfoWindowF onCloseClick={() => setActiveMarker(null)}>
-                <Box sx={{ maxWidth: "200px", textAlign: "center" }}>
-                  <div>{name}</div>
-                  <Grid sx={{ display: "flex", flexFlow: "wrap", mt: 1 }}>
-                    <Avatar
-                      alt="Remy Sharp"
-                      src="/static/images/avatar/1.jpg"
-                      sx={{ width: 30, height: 30, m: "4px" }}
-                    />
-                    <Avatar
-                      alt="Remy Sharp"
-                      src="/static/images/avatar/1.jpg"
-                      sx={{ width: 30, height: 30, m: "4px" }}
-                    />
-                    <Avatar
-                      alt="Remy Sharp"
-                      src="/static/images/avatar/1.jpg"
-                      sx={{ width: 30, height: 30, m: "4px" }}
-                    />
-                    <Avatar
-                      alt="Remy Sharp"
-                      src="/static/images/avatar/1.jpg"
-                      sx={{ width: 30, height: 30, m: "4px" }}
-                    />
-                    <Avatar
-                      alt="Remy Sharp"
-                      src="/static/images/avatar/1.jpg"
-                      sx={{ width: 30, height: 30, m: "4px" }}
-                    />
-                    <Avatar
-                      alt="Remy Sharp"
-                      src="/static/images/avatar/1.jpg"
-                      sx={{ width: 30, height: 30, m: "4px" }}
-                    />
-                    <Avatar
-                      alt="Remy Sharp"
-                      src="/static/images/avatar/1.jpg"
-                      sx={{ width: 30, height: 30, m: "4px" }}
-                    />
-                    <Avatar
-                      alt="Remy Sharp"
-                      src="/static/images/avatar/1.jpg"
-                      sx={{ width: 30, height: 30, m: "4px" }}
-                    />
-                    <Avatar
-                      alt="Remy Sharp"
-                      src="/static/images/avatar/1.jpg"
-                      sx={{ width: 30, height: 30, m: "4px" }}
-                    />
-                  </Grid>
-                  <Fab
-                    variant="extended"
-                    size="medium"
-                    color="primary"
-                    aria-label="add"
-                    sx={{ m: 2 }}
-                    onClick={() => console.log(name, id)}
-                  >
-                    <AddIcon sx={{ mr: 1 }} />
-                    Click Me!
-                  </Fab>
-                </Box>
-              </InfoWindowF>
-            ) : null}
-          </Marker>
-        )
-      )}
-      <MapCards setActive={setActiveMarker} activeMarker={activeMarker} />
-    </GoogleMap>
+    <Grid style={{ position: "fixed" }}>
+      <GoogleMap
+        mapContainerStyle={containerStyle}
+        center={center}
+        zoom={8}
+        onLoad={onLoad}
+        onUnmount={onUnmount}
+        onClick={() => setActiveMarker(null)}
+        style={{ position: "fixed" }}
+        defaultClickableIcons={false}
+      >
+        {spots.map(
+          ({ id, attributes: { name, desc, image, latitude, longitude } }) => (
+            <Marker
+              key={id}
+              position={{ lat: latitude, lng: longitude }}
+              onClick={() => handleActiveMarker(id)}
+            >
+              {activeMarker === id ? (
+                <InfoWindowF onCloseClick={() => setActiveMarker(null)}>
+                  <Box sx={{ maxWidth: "200px", textAlign: "center" }}>
+                    <div>{name}</div>
+                    <Grid sx={{ display: "flex", flexFlow: "wrap", mt: 1 }}>
+                      <Avatar
+                        alt="Remy Sharp"
+                        src="/static/images/avatar/1.jpg"
+                        sx={{ width: 30, height: 30, m: "4px" }}
+                      />
+                      <Avatar
+                        alt="Remy Sharp"
+                        src="/static/images/avatar/1.jpg"
+                        sx={{ width: 30, height: 30, m: "4px" }}
+                      />
+                      <Avatar
+                        alt="Remy Sharp"
+                        src="/static/images/avatar/1.jpg"
+                        sx={{ width: 30, height: 30, m: "4px" }}
+                      />
+                      <Avatar
+                        alt="Remy Sharp"
+                        src="/static/images/avatar/1.jpg"
+                        sx={{ width: 30, height: 30, m: "4px" }}
+                      />
+                      <Avatar
+                        alt="Remy Sharp"
+                        src="/static/images/avatar/1.jpg"
+                        sx={{ width: 30, height: 30, m: "4px" }}
+                      />
+                      <Avatar
+                        alt="Remy Sharp"
+                        src="/static/images/avatar/1.jpg"
+                        sx={{ width: 30, height: 30, m: "4px" }}
+                      />
+                      <Avatar
+                        alt="Remy Sharp"
+                        src="/static/images/avatar/1.jpg"
+                        sx={{ width: 30, height: 30, m: "4px" }}
+                      />
+                      <Avatar
+                        alt="Remy Sharp"
+                        src="/static/images/avatar/1.jpg"
+                        sx={{ width: 30, height: 30, m: "4px" }}
+                      />
+                      <Avatar
+                        alt="Remy Sharp"
+                        src="/static/images/avatar/1.jpg"
+                        sx={{ width: 30, height: 30, m: "4px" }}
+                      />
+                    </Grid>
+
+                    {activityIsOpened ? (
+                      <>
+                        <Grid sx={{ textAlign: "-webkit-center" }}>
+                          <StartActivity />
+                        </Grid>
+                        <Fab
+                          variant="extended"
+                          size="medium"
+                          color="primary"
+                          aria-label="add"
+                          sx={{ m: 2 }}
+                          onClick={() => console.log(name, id)}
+                        >
+                          <AddIcon sx={{ mr: 1 }} />
+                          Submit
+                        </Fab>
+                      </>
+                    ) : (
+                      <Fab
+                        variant="extended"
+                        size="medium"
+                        color="primary"
+                        aria-label="add"
+                        sx={{ m: 2 }}
+                        onClick={() => setActivityIsOpened(true)}
+                      >
+                        <AddIcon sx={{ mr: 1 }} />
+                        Add Me
+                      </Fab>
+                    )}
+                  </Box>
+                </InfoWindowF>
+              ) : null}
+            </Marker>
+          )
+        )}
+        <MapCards setActive={setActiveMarker} activeMarker={activeMarker} />
+      </GoogleMap>
+    </Grid>
   ) : (
     <></>
   );
