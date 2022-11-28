@@ -53,11 +53,6 @@ export default function Profile() {
       .string()
       .required("Nazwisko jest wymagane")
       .min(3, "Nazwisko jest za krótkie"),
-    region: yup.string().required("Województwo jest wymagane"),
-    education: yup.string().required("Wykształcenie jest wymagane"),
-    typeOfEducation: yup
-      .string()
-      .required("Kierunek wykształcenia jest wymagany"),
     phone: yup
       .string()
       .required("Numer jest wymagany")
@@ -191,51 +186,49 @@ export default function Profile() {
             autoComplete="off"
             onSubmit={handleSubmit(onSubmit)}
           >
-            <div>
-              <TextField
-                required
-                id="outlined-required"
-                label="Imię"
-                defaultValue={firstname}
-                onChange={(e) => setFirstname(e.target.value)}
-                {...register("firstname")}
-                helperText={errors.firstname && errors.firstname.message}
-                error={errors.firstname !== undefined}
-              />
-              <TextField
-                required
-                id="outlined-required"
-                label="Nazwisko"
-                defaultValue={lastname}
-                onChange={(e) => setLastname(e.target.value)}
-                {...register("lastname")}
-                helperText={errors.lastname && errors.lastname.message}
-                error={errors.lastname !== undefined}
-              />
+            <TextField
+              required
+              id="outlined-required"
+              label="Imię"
+              defaultValue={firstname}
+              onChange={(e) => setFirstname(e.target.value)}
+              {...register("firstname")}
+              helperText={errors.firstname && errors.firstname.message}
+              error={errors.firstname !== undefined}
+            />
+            <TextField
+              required
+              id="outlined-required"
+              label="Nazwisko"
+              defaultValue={lastname}
+              onChange={(e) => setLastname(e.target.value)}
+              {...register("lastname")}
+              helperText={errors.lastname && errors.lastname.message}
+              error={errors.lastname !== undefined}
+            />
 
-              <TextField
-                required
-                id="outlined-required"
-                label="Telefon"
-                defaultValue={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                {...register("phone")}
-                helperText={errors.phone && errors.phone.message}
-                error={errors.phone !== undefined}
-              />
-              <Stack
-                direction="row"
-                spacing={2}
-                sx={{ justifyContent: "center" }}
-              >
-                <Button type="submit" variant="outlined">
-                  Zapisz
-                </Button>
-                <Button variant="outlined" onClick={() => navigate("/")}>
-                  Odrzuć
-                </Button>
-              </Stack>
-            </div>
+            <TextField
+              required
+              id="outlined-required"
+              label="Telefon"
+              defaultValue={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              {...register("phone")}
+              helperText={errors.phone && errors.phone.message}
+              error={errors.phone !== undefined}
+            />
+            <Stack
+              direction="row"
+              spacing={2}
+              sx={{ justifyContent: "center" }}
+            >
+              <Button type="submit" variant="outlined">
+                Zapisz
+              </Button>
+              <Button variant="outlined" onClick={() => navigate("/")}>
+                Odrzuć
+              </Button>
+            </Stack>
           </Box>
         </Paper>
       </Container>

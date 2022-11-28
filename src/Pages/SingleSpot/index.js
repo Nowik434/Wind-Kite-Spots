@@ -8,12 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 // import { getCertificates } from "../../Slices/certificates";
 import { useParams } from "react-router-dom";
 import { createSelector } from "reselect";
-import Copyright from "../../Components/Copyright";
-import DownloadIcon from "@mui/icons-material/Download";
-import PrintIcon from "@mui/icons-material/Print";
-import { useReactToPrint } from "react-to-print";
-import useDownload from "../../Hooks/useDownload";
-import { getSpots } from "../../Slices/spots";
+
+const UPLOADS_URL = process.env.REACT_APP_UPLOADS_URL;
 
 export default function SingleSpot() {
   let { spotId } = useParams();
@@ -47,7 +43,7 @@ export default function SingleSpot() {
               color="text.primary"
               gutterBottom
             >
-              Spot {spot.name}
+              Spot {spot && spot.name}
             </Typography>
             <Typography
               variant="h4"
@@ -55,39 +51,21 @@ export default function SingleSpot() {
               color="text.secondary"
               paragraph
             >
-              {spot && spot.name}
-            </Typography>
-            <Typography
-              variant="h6"
-              align="center"
-              color="text.secondary"
-              paragraph
-            >
-              Numer: {spot && spot.cerId}
-            </Typography>
-            <Typography
-              variant="h6"
-              align="center"
-              color="text.secondary"
-              paragraph
-            >
-              Data: {spot && spot.date}
+              {spot && spot.desc}
             </Typography>
             <div style={{ marginTop: "20px", marginBottom: "20px" }}>
               <img
-                src={spot && spot.url}
+                src={
+                  spot.image.data
+                    ? `${UPLOADS_URL}${spot.image.data.attributes.url}`
+                    : null
+                }
                 alt={spot && spot.name}
                 loading="lazy"
                 style={{ maxWidth: "100%" }}
                 ref={componentRef}
               />
             </div>
-            <Stack
-              sx={{ pt: 4 }}
-              direction="row"
-              spacing={2}
-              justifyContent="center"
-            ></Stack>
           </Container>
         </Box>
       )}
