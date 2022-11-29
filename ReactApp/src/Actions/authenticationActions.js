@@ -115,6 +115,6 @@ export const forgotPassword = async (email, thunkAPI) => {
 };
 
 export const logoutUser = () => {
+  localStorage.removeItem("spots");
   localStorage.removeItem("user");
-  sessionStorage.removeItem("spots");
 };
