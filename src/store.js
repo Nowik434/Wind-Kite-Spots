@@ -3,8 +3,6 @@ import auth from "./Slices/auth";
 import messageReducer from "./Slices/message";
 // import pinsReducer from "./Slices/spots";
 import spotsReducer from "./Slices/spots";
-import storage from "redux-persist/lib/storage";
-import { persistReducer, persistStore } from "redux-persist";
 
 const reducer = combineReducers({
   auth: auth,
@@ -13,20 +11,39 @@ const reducer = combineReducers({
   spots: spotsReducer,
 });
 
-const persistConfig = {
-  key: "root",
-  storage,
+const saveToLocalStorage = (state) => {
+  try {
+    if (state && state.auth.user.jwt !== null) {
+      localStorage.setItem("spots", JSON.stringify(state));
+    }
+  } catch (e) {}
 };
 
-const persistedReducer = persistReducer(persistConfig, reducer);
+const loadFromLocalStorage = () => {
+  try {
+    const stateStr = localStorage.getItem("spots");
+    console.log("dsadsad", JSON.parse(stateStr));
+    return stateStr ? JSON.parse(stateStr) : undefined;
+  } catch (e) {
+    console.error(e);
+    return undefined;
+  }
+};
+
+const persistedStore = loadFromLocalStorage();
 
 const store = configureStore({
-  reducer: persistedReducer,
+  reducer: reducer,
+  preloadedState: persistedStore,
   devTools: true,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
     }),
+});
+
+store.subscribe(() => {
+  saveToLocalStorage(store.getState());
 });
 
 export default store;

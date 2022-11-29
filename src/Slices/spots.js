@@ -8,8 +8,12 @@ export const getSpots = createAsyncThunk("spots", async (user, thunkAPI) => {
     console.log(user);
     const data = await userService.getSpotsAction(user.jwt);
     console.log(data);
+    if (data) {
+      localStorage.setItem("spots", JSON.stringify(data.data.data));
+    }
     return { spots: data };
   } catch (error) {
+    localStorage.removeItem("spots");
     //   const message =
     //     (error.response &&
     //       error.response.data &&

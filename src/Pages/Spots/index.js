@@ -17,6 +17,7 @@ import DropdownShareButton from "../../Components/DropdownShareButton";
 import { Fade, Link } from "@mui/material";
 import { useDocumentTitle } from "../../Hooks/useDocumentTitle";
 import { Footer } from "../../Components/Footer";
+import { useNavigate } from "react-router-dom";
 
 const UPLOADS_URL = process.env.REACT_APP_UPLOADS_URL;
 
@@ -25,6 +26,9 @@ export default function Spots() {
   const [displaySelected, setDisplaySelected] = useState(false);
   const [filtered, setFiltered] = useState();
   const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+
   const yourTypes = useSelector((state) =>
     state.spots.reduce(
       (unique, item) =>
@@ -192,7 +196,12 @@ export default function Spots() {
                           }}
                           target="_blank"
                         >
-                          <Button size="small">More</Button>
+                          <Button
+                            onClick={() => navigate(`/spots/${id}`)}
+                            size="small"
+                          >
+                            More
+                          </Button>
                         </Link>
                       </CardActions>
                     </Card>
