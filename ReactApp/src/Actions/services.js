@@ -1,4 +1,3 @@
-import { authHeader } from "./authenticationActions";
 import axios from "axios";
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -7,31 +6,25 @@ const getPublicContent = () => {
 };
 
 const getSpotsAction = (token) => {
-  console.log("fdsfdsf", token);
+  console.log("get spots action", token);
   axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   return axios.get(`${API_URL}/spots/?populate=*`);
 };
 
-// const getPinsAction = (email) => {
-//   const qs = require('qs');
-//   const query = qs.stringify({
-//     populate: '*',
-//     filters: {
-//       user: {
-//         email: {
-//           $eq: email,
-//         },
-//       }
-//     },
-//   }, {
-//     encodeValuesOnly: true,
-//   });
-//   return axios.get(`${API_URL}/pins?${query}`);
-// };
+const addActiveUserAction = (id, token, payload) => {
+  console.log("add active user", token);
+  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  return axios.put(`${API_URL}/spots/${id}`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: { activeUsers: payload },
+  });
+};
 
 const userService = {
   getPublicContent,
-  // getPinsAction,
+  addActiveUserAction,
   getSpotsAction,
 };
 export default userService;

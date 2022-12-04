@@ -1,7 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import userService from "../Actions/services";
-// import { setMessage } from "./message";
-// const user = JSON.parse(localStorage.getItem("user"));
 
 export const getSpots = createAsyncThunk("spots", async (user, thunkAPI) => {
   try {
@@ -14,17 +12,31 @@ export const getSpots = createAsyncThunk("spots", async (user, thunkAPI) => {
     return { spots: data };
   } catch (error) {
     localStorage.removeItem("spots");
-    //   const message =
-    //     (error.response &&
-    //       error.response.data &&
-    //       error.response.data.message) ||
-    //     error.message ||
-    //     error.toString();
-    //     console.log(message)
-    //   thunkAPI.dispatch(setMessage(message));
     return thunkAPI.rejectWithValue();
   }
 });
+
+export const addActiveUser = createAsyncThunk(
+  "spots/addActiveUser",
+  async ({ id, token, payload }, thunkAPI) => {
+    console.log(id, token, payload);
+    try {
+      console.log(id, token, payload);
+      const data = await userService.addActiveUserAction(id, token, payload);
+      console.log(data);
+      return data;
+    } catch (error) {
+      console.error(error.response.data.error);
+      let message;
+      if (error.response.data.error.status) {
+        message = "You have provided incorrect data";
+      }
+      console.log(message);
+      // thunkAPI.dispatch(setMessage(message));
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
 
 const initialState = [];
 

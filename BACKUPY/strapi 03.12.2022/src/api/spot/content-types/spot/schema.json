@@ -40,9 +40,6 @@
     },
     "longitude": {
       "type": "float"
-    },
-    "activeUsers": {
-      "type": "json"
     }
   }
 }

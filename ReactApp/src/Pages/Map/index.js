@@ -5,13 +5,16 @@ import {
   Marker,
   useJsApiLoader,
 } from "@react-google-maps/api";
-import { Avatar, Fab, Grid } from "@mui/material";
+import { Avatar, Fab, Grid, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { Box } from "@mui/system";
 import MapCards from "../../Components/MapCards";
 import StartActivity from "../../Components/StartActivity";
+import { addActiveUser } from "../../Slices/spots";
+import { useDispatch, useSelector } from "react-redux";
 
 const GOOGLE_API = process.env.REACT_APP_GOOGLE_MAPS_APIKEY;
+const UPLOADS_URL = process.env.REACT_APP_UPLOADS_URL;
 
 const markers = [
   {
@@ -51,6 +54,12 @@ const center = {
 function Map({ spots }) {
   const [activeMarker, setActiveMarker] = useState(null);
   const [activityIsOpened, setActivityIsOpened] = useState(false);
+  const [expirationDate, setExpirationDate] = useState();
+
+  console.log("EXPIRATION", expirationDate);
+
+  const dispatch = useDispatch();
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const handleActiveMarker = (marker) => {
     if (marker === activeMarker) {
@@ -81,6 +90,42 @@ function Map({ spots }) {
     setMap(null);
   }, []);
 
+  const handleClose = () => {
+    setActiveMarker(null);
+    setActivityIsOpened(false);
+  };
+
+  const handleSubmit = (id) => {
+    console.log("SUBMITED");
+
+    // console.log([
+    //   ...spots[id - 1].attributes.activeUsers,
+    //   {
+    //     username: user.user.username,
+    //     firstname: "Paweł",
+    //     lastname: "Nowicki",
+    //     profileImage: "/uploads/r324_d63f7f0e97.jpg",
+    //   },
+    // ]);
+
+    dispatch(
+      addActiveUser({
+        id: id,
+        token: JSON.parse(localStorage.getItem("user")).jwt,
+        payload: [
+          ...spots[id - 1].attributes.activeUsers,
+          {
+            username: user.user.username,
+            firstname: user.user.firstname,
+            lastname: user.user.lastname,
+            profileImage: user.user.username.profileImage,
+            timestamp: expirationDate,
+          },
+        ],
+      })
+    );
+  };
+
   return isLoaded ? (
     <Grid style={{ position: "fixed" }}>
       <GoogleMap
@@ -94,68 +139,45 @@ function Map({ spots }) {
         defaultClickableIcons={false}
       >
         {spots.map(
-          ({ id, attributes: { name, desc, image, latitude, longitude } }) => (
+          ({
+            id,
+            attributes: { name, desc, image, latitude, longitude, activeUsers },
+          }) => (
             <Marker
               key={id}
               position={{ lat: latitude, lng: longitude }}
               onClick={() => handleActiveMarker(id)}
             >
               {activeMarker === id ? (
-                <InfoWindowF onCloseClick={() => setActiveMarker(null)}>
+                <InfoWindowF onCloseClick={() => handleClose()}>
                   <Box sx={{ maxWidth: "200px", textAlign: "center" }}>
                     <div>{name}</div>
                     <Grid sx={{ display: "flex", flexFlow: "wrap", mt: 1 }}>
-                      <Avatar
-                        alt="Remy Sharp"
-                        src="/static/images/avatar/1.jpg"
-                        sx={{ width: 30, height: 30, m: "4px" }}
-                      />
-                      <Avatar
-                        alt="Remy Sharp"
-                        src="/static/images/avatar/1.jpg"
-                        sx={{ width: 30, height: 30, m: "4px" }}
-                      />
-                      <Avatar
-                        alt="Remy Sharp"
-                        src="/static/images/avatar/1.jpg"
-                        sx={{ width: 30, height: 30, m: "4px" }}
-                      />
-                      <Avatar
-                        alt="Remy Sharp"
-                        src="/static/images/avatar/1.jpg"
-                        sx={{ width: 30, height: 30, m: "4px" }}
-                      />
-                      <Avatar
-                        alt="Remy Sharp"
-                        src="/static/images/avatar/1.jpg"
-                        sx={{ width: 30, height: 30, m: "4px" }}
-                      />
-                      <Avatar
-                        alt="Remy Sharp"
-                        src="/static/images/avatar/1.jpg"
-                        sx={{ width: 30, height: 30, m: "4px" }}
-                      />
-                      <Avatar
-                        alt="Remy Sharp"
-                        src="/static/images/avatar/1.jpg"
-                        sx={{ width: 30, height: 30, m: "4px" }}
-                      />
-                      <Avatar
-                        alt="Remy Sharp"
-                        src="/static/images/avatar/1.jpg"
-                        sx={{ width: 30, height: 30, m: "4px" }}
-                      />
-                      <Avatar
-                        alt="Remy Sharp"
-                        src="/static/images/avatar/1.jpg"
-                        sx={{ width: 30, height: 30, m: "4px" }}
-                      />
+                      {activeUsers ? (
+                        Object.keys(activeUsers).map((user, i) => (
+                          <Avatar
+                            alt={`${activeUsers[user].firstname} ${activeUsers[user].lastname}`}
+                            src={UPLOADS_URL + activeUsers[user].profileImage}
+                            sx={{ width: 30, height: 30, m: "4px" }}
+                          />
+                        ))
+                      ) : (
+                        <Typography
+                          variant="h6"
+                          component="h6"
+                          sx={{ alignSelf: "center" }}
+                        >
+                          No active users
+                        </Typography>
+                      )}
                     </Grid>
 
                     {activityIsOpened ? (
                       <>
                         <Grid sx={{ textAlign: "-webkit-center" }}>
-                          <StartActivity />
+                          <StartActivity
+                            setExpirationDate={setExpirationDate}
+                          />
                         </Grid>
                         <Fab
                           variant="extended"
@@ -163,7 +185,7 @@ function Map({ spots }) {
                           color="primary"
                           aria-label="add"
                           sx={{ m: 2 }}
-                          onClick={() => console.log(name, id)}
+                          onClick={() => handleSubmit(id)}
                         >
                           <AddIcon sx={{ mr: 1 }} />
                           Submit

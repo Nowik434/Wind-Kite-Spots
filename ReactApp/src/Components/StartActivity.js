@@ -32,15 +32,46 @@ function valuetext(value) {
   return `${value}`;
 }
 
-export default function StartActivity() {
+export default function StartActivity({ setExpirationDate }) {
   const [value, setValue] = useState(dayjs("2022-12-18T21:11:54"));
+  const [duration, setDuration] = useState();
   const mobileView = useMediaQuery("(max-width:600px)");
 
-  const handleChange = (newValue) => {
-    setValue(newValue);
+  const addTime = (duration) => {
+    console.log(duration);
+    switch (duration) {
+      case 0:
+        console.log("duration is 0");
+        return 1;
+      case 0.25:
+        console.log("duration is 0.25");
+        return 2;
+      case 0.75:
+        console.log("duration is 0.75");
+        return 3;
+      case 1:
+        console.log("duration is 1");
+        return 10;
+      default:
+        console.log("no value");
+    }
   };
+  // const testReturn = addTime(duration);
+  // console.log(testReturn);
 
-  console.log(mobileView);
+  const handleChange = (newValue) => {
+    // const currentDate = new Date();
+    const date = new Date(newValue);
+    // console.log(date);
+    setValue(date);
+    setExpirationDate(
+      new Date(date.setHours(date.getHours() + addTime(duration)))
+    );
+  };
+  // console.log(value);
+  // console.log(new Date(value));
+  // console.log(currentDate);
+  // console.log(new Date(currentDate.setHours(currentDate.getHours() + 2)));
 
   return (
     <>
@@ -73,7 +104,9 @@ export default function StartActivity() {
           getAriaValueText={valuetext}
           step={34}
           marks={marks}
-          // valueLabelDisplay="on"
+          onChange={(e) =>
+            setDuration(Math.round(e.target.value * 0.01 * 4) / 4)
+          }
         />
       </Box>
     </>
