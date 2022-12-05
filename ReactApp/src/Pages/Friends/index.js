@@ -13,25 +13,66 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import SendIcon from "@mui/icons-material/Send";
+import { useNavigate } from "react-router-dom";
+import { socket } from "../../config/web-sockets";
+
+const messages = [
+  { name: "dsadsa", value: "ewreww" },
+  { name: "dsads6543", value: "ewre43" },
+];
 
 const Friends = () => {
+  const [message, setMessage] = useState();
+
+  const navigate = useNavigate();
+
+  const [username, setUsername] = useState("aaa@aaa.pl");
+  const [room, setRoom] = useState("aaa");
+  const [error, setError] = useState("");
+  const onUsernameChange = (e) => {
+    const inputValue = e.target.value;
+    setUsername(inputValue);
+  };
+  const onRoomChange = (e) => {
+    const roomNo = e.target.value;
+    setRoom(roomNo);
+  };
+  const enterRoom = () => {
+    console.log("Entering", socket);
+    if (username && room) {
+      socket.emit("join", { username, room }, (error) => {
+        console.log("emit");
+        if (error) {
+          console.log(error);
+          setError(error);
+          alert(error);
+        } else {
+          socket.on("welcome", (data) => {
+            console.log("ggggggggggggggg", data);
+            // props.onJoinSuccess(data);
+          });
+        }
+      });
+    }
+  };
+  socket.on("welcome", (data) => {
+    console.log("Welcome event inside JoinRoom", data);
+    // props.onJoinSuccess(data);
+  });
+
+  const handleSubmit = (e) => {
+    console.log(message);
+    setMessage("");
+  };
+
   return (
     <>
-      {/* <Container maxWidth="lg" sx={{ mt: 7 }}> */}
-      {/* <Grid container>
-        <Grid item xs={12}>
-          <Typography variant="h5" className="header-message">
-            Chat
-          </Typography>
-        </Grid>
-      </Grid> */}
       <Grid
         container
         component={Paper}
         sx={{
-          // border: "1px solid #00000099",
           borderRadius: "5px",
           width: "100%",
           height: "100vh",
@@ -57,7 +98,7 @@ const Friends = () => {
           </Grid>
           <Divider />
           <List>
-            <ListItem button key="RemySharp">
+            <ListItem button key="RemySharp" onClick={() => enterRoom()}>
               <ListItemIcon>
                 <Avatar
                   alt="Remy Sharp"
@@ -348,11 +389,17 @@ const Friends = () => {
               <TextField
                 id="outlined-basic-email"
                 label="Type Something"
+                value={message}
                 fullWidth
+                onChange={(e) => setMessage(e.target.value)}
               />
             </Grid>
             <Grid xs={1} align="right">
-              <Fab color="primary" aria-label="add">
+              <Fab
+                color="primary"
+                aria-label="add"
+                onClick={() => handleSubmit()}
+              >
                 <SendIcon />
               </Fab>
             </Grid>
