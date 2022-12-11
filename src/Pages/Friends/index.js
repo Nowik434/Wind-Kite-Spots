@@ -1,71 +1,163 @@
 import {
   Avatar,
-  Container,
+  Box,
   Divider,
-  Fab,
   Grid,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
-  makeStyles,
   Paper,
   TextField,
-  Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import SendIcon from "@mui/icons-material/Send";
-import { useNavigate } from "react-router-dom";
+import { Routes, useNavigate, Route } from "react-router-dom";
 import { socket } from "../../config/web-sockets";
+import ChatRoom from "./components/ChatRoom/index";
+import { useEffect } from "react";
 
 const messages = [
   { name: "dsadsa", value: "ewreww" },
   { name: "dsads6543", value: "ewre43" },
 ];
 
-const Friends = () => {
-  const [message, setMessage] = useState();
+const users = [
+  {
+    key: "RemySharp",
+    avatar: "https://material-ui.com/static/images/avatar/1.jpg",
+    primary: "John Wick",
+  },
+  {
+    key: "AvaAdams",
+    avatar: "https://material-ui.com/static/images/avatar/2.jpg",
+    primary: "Lara Croft",
+  },
+  {
+    key: "DomHarrison",
+    avatar: "https://material-ui.com/static/images/avatar/3.jpg",
+    primary: "Indiana Jones",
+  },
+  {
+    key: "LucasGreen",
+    avatar: "https://material-ui.com/static/images/avatar/4.jpg",
+    primary: "Ellen Ripley",
+  },
+  {
+    key: "LucasGreen",
+    avatar: "https://material-ui.com/static/images/avatar/4.jpg",
+    primary: "Ellen Ripley",
+  },
+  {
+    key: "DavidJones",
+    avatar: "https://material-ui.com/static/images/avatar/5.jpg",
+    primary: "James Bond",
+  },
+  {
+    key: "OliviaSmith",
+    avatar: "https://material-ui.com/static/images/avatar/6.jpg",
+    primary: "Katniss Everdeen",
+  },
+  {
+    key: "EmilyBrown",
+    avatar: "https://material-ui.com/static/images/avatar/7.jpg",
+    primary: "Hermione Granger",
+  },
+  {
+    key: "CharlieDavis",
+    avatar: "https://material-ui.com/static/images/avatar/6.jpg",
+    primary: "Harry Potter",
+  },
+  {
+    key: "IsabellaWilson",
+    avatar: "https://material-ui.com/static/images/avatar/5.jpg",
+    primary: "Daenerys Targaryen",
+  },
+  {
+    key: "OliverBaker",
+    avatar: "https://material-ui.com/static/images/avatar/6.jpg",
+    primary: "Tyrion Lannister",
+  },
+  {
+    key: "JackThomas",
+    avatar: "https://material-ui.com/static/images/avatar/1.jpg",
+    primary: "Jon Snow",
+  },
+  {
+    key: "LucasGreen",
+    avatar: "https://material-ui.com/static/images/avatar/4.jpg",
+    primary: "Ellen Ripley",
+  },
+  {
+    key: "LucasGreen",
+    avatar: "https://material-ui.com/static/images/avatar/4.jpg",
+    primary: "Ellen Ripley",
+  },
+  {
+    key: "DavidJones",
+    avatar: "https://material-ui.com/static/images/avatar/5.jpg",
+    primary: "James Bond",
+  },
+  {
+    key: "OliviaSmith",
+    avatar: "https://material-ui.com/static/images/avatar/6.jpg",
+    primary: "Katniss Everdeen",
+  },
+];
 
+const Friends = () => {
+  const [username, setUsername] = useState("Pawel");
+  const [room, setRoom] = useState("12");
+  const [joinData, setJoinData] = useState({});
   const navigate = useNavigate();
 
-  const [username, setUsername] = useState("aaa@aaa.pl");
-  const [room, setRoom] = useState("aaa");
-  const [error, setError] = useState("");
-  const onUsernameChange = (e) => {
-    const inputValue = e.target.value;
-    setUsername(inputValue);
-  };
-  const onRoomChange = (e) => {
-    const roomNo = e.target.value;
-    setRoom(roomNo);
-  };
-  const enterRoom = () => {
-    console.log("Entering", socket);
-    if (username && room) {
-      socket.emit("join", { username, room }, (error) => {
-        console.log("emit");
-        if (error) {
-          console.log(error);
-          setError(error);
-          alert(error);
-        } else {
-          socket.on("welcome", (data) => {
-            console.log("ggggggggggggggg", data);
-            // props.onJoinSuccess(data);
-          });
-        }
-      });
-    }
-  };
-  socket.on("welcome", (data) => {
-    console.log("Welcome event inside JoinRoom", data);
-    // props.onJoinSuccess(data);
-  });
+  function onJoinSuccess(data) {
+    // setJoinData(data);
+    // setUsername(data.userData.username);
+    // setRoom(data.userData.room);
+    // navigate(`/chat/rooms/${data.userData.room}`);
+    navigate(`/friends/chat/rooms/${10}`);
+  }
 
-  const handleSubmit = (e) => {
-    console.log(message);
-    setMessage("");
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("Connected");
+    });
+
+    socket.on("disconnect", () => {
+      console.log("disconnect");
+    });
+
+    socket.on("join", (socket) => {
+      console.log("join");
+    });
+    socket.on("send-message", (socket) => {
+      console.log("send-message");
+      socket.on("send-message:create", (data) => {
+        console.log(data);
+      });
+    });
+
+    return () => {
+      socket.off("connect");
+      socket.off("disconnect");
+      socket.off("join");
+    };
+  }, []);
+
+  const onClick = () => {
+    socket.on("connect", () => {
+      socket.on("send-message:update", (data) => {
+        console.log(data);
+      });
+    });
+
+    console.log(socket);
   };
+
+  socket.on("connection", (data) => {
+    console.log("Welcome event inside JoinRoom", data);
+    onJoinSuccess(data);
+  });
 
   return (
     <>
@@ -98,315 +190,23 @@ const Friends = () => {
           </Grid>
           <Divider />
           <List>
-            <ListItem button key="RemySharp" onClick={() => enterRoom()}>
-              <ListItemIcon>
-                <Avatar
-                  alt="Remy Sharp"
-                  src="https://material-ui.com/static/images/avatar/1.jpg"
-                />
-              </ListItemIcon>
-              <ListItemText primary="John Wick"></ListItemText>
-            </ListItem>
-          </List>
-          <Divider />
-          <List>
-            <ListItem button key="RemySharp">
-              <ListItemIcon>
-                <Avatar
-                  alt="Remy Sharp"
-                  src="https://material-ui.com/static/images/avatar/1.jpg"
-                />
-              </ListItemIcon>
-              <ListItemText primary="John Wick"></ListItemText>
-            </ListItem>
-          </List>
-          <Divider />
-          <List>
-            <ListItem button key="RemySharp">
-              <ListItemIcon>
-                <Avatar
-                  alt="Remy Sharp"
-                  src="https://material-ui.com/static/images/avatar/1.jpg"
-                />
-              </ListItemIcon>
-              <ListItemText primary="John Wick"></ListItemText>
-            </ListItem>
-          </List>
-          <Divider />
-          <List>
-            <ListItem button key="RemySharp">
-              <ListItemIcon>
-                <Avatar
-                  alt="Remy Sharp"
-                  src="https://material-ui.com/static/images/avatar/1.jpg"
-                />
-              </ListItemIcon>
-              <ListItemText primary="John Wick"></ListItemText>
-            </ListItem>
-          </List>
-          <Divider />
-          <List>
-            <ListItem button key="RemySharp">
-              <ListItemIcon>
-                <Avatar
-                  alt="Remy Sharp"
-                  src="https://material-ui.com/static/images/avatar/1.jpg"
-                />
-              </ListItemIcon>
-              <ListItemText primary="John Wick"></ListItemText>
-            </ListItem>
-          </List>
-          <Divider />
-          <List>
-            <ListItem button key="RemySharp">
-              <ListItemIcon>
-                <Avatar
-                  alt="Remy Sharp"
-                  src="https://material-ui.com/static/images/avatar/1.jpg"
-                />
-              </ListItemIcon>
-              <ListItemText primary="John Wick"></ListItemText>
-            </ListItem>
-          </List>
-          <Divider />
-          <List>
-            <ListItem button key="RemySharp">
-              <ListItemIcon>
-                <Avatar
-                  alt="Remy Sharp"
-                  src="https://material-ui.com/static/images/avatar/1.jpg"
-                />
-              </ListItemIcon>
-              <ListItemText primary="John Wick"></ListItemText>
-            </ListItem>
-          </List>
-          <Divider />
-          <List>
-            <ListItem button key="RemySharp">
-              <ListItemIcon>
-                <Avatar
-                  alt="Remy Sharp"
-                  src="https://material-ui.com/static/images/avatar/1.jpg"
-                />
-              </ListItemIcon>
-              <ListItemText primary="John Wick"></ListItemText>
-            </ListItem>
-          </List>
-          <Divider />
-          <List>
-            <ListItem button key="RemySharp">
-              <ListItemIcon>
-                <Avatar
-                  alt="Remy Sharp"
-                  src="https://material-ui.com/static/images/avatar/1.jpg"
-                />
-              </ListItemIcon>
-              <ListItemText primary="John Wick"></ListItemText>
-            </ListItem>
-          </List>
-          <Divider />
-          <List>
-            <ListItem button key="RemySharp">
-              <ListItemIcon>
-                <Avatar
-                  alt="Remy Sharp"
-                  src="https://material-ui.com/static/images/avatar/1.jpg"
-                />
-              </ListItemIcon>
-              <ListItemText primary="John Wick"></ListItemText>
-            </ListItem>
-          </List>
-          <Divider />
-          <List>
-            <ListItem button key="RemySharp">
-              <ListItemIcon>
-                <Avatar
-                  alt="Remy Sharp"
-                  src="https://material-ui.com/static/images/avatar/1.jpg"
-                />
-              </ListItemIcon>
-              <ListItemText primary="John Wick"></ListItemText>
-            </ListItem>
-          </List>
-          <Divider />
-          <List>
-            <ListItem button key="RemySharp">
-              <ListItemIcon>
-                <Avatar
-                  alt="Remy Sharp"
-                  src="https://material-ui.com/static/images/avatar/1.jpg"
-                />
-              </ListItemIcon>
-              <ListItemText primary="John Wick"></ListItemText>
-            </ListItem>
-          </List>
-          <Divider />
-          <List>
-            <ListItem button key="RemySharp">
-              <ListItemIcon>
-                <Avatar
-                  alt="Remy Sharp"
-                  src="https://material-ui.com/static/images/avatar/1.jpg"
-                />
-              </ListItemIcon>
-              <ListItemText primary="John Wick"></ListItemText>
-            </ListItem>
-          </List>
-          <Divider />
-          <List>
-            <ListItem button key="RemySharp">
-              <ListItemIcon>
-                <Avatar
-                  alt="Remy Sharp"
-                  src="https://material-ui.com/static/images/avatar/1.jpg"
-                />
-              </ListItemIcon>
-              <ListItemText primary="John Wick"></ListItemText>
-            </ListItem>
-          </List>
-          <Divider />
-          <List>
-            <ListItem button key="RemySharp">
-              <ListItemIcon>
-                <Avatar
-                  alt="Remy Sharp"
-                  src="https://material-ui.com/static/images/avatar/1.jpg"
-                />
-              </ListItemIcon>
-              <ListItemText primary="John Wick"></ListItemText>
-            </ListItem>
-          </List>
-          <Divider />
-          <List>
-            <ListItem button key="RemySharp">
-              <ListItemIcon>
-                <Avatar
-                  alt="Remy Sharp"
-                  src="https://material-ui.com/static/images/avatar/1.jpg"
-                />
-              </ListItemIcon>
-              <ListItemText primary="John Wick"></ListItemText>
-            </ListItem>
-          </List>
-          <Divider />
-          <List>
-            <ListItem button key="RemySharp">
-              <ListItemIcon>
-                <Avatar
-                  alt="Remy Sharp"
-                  src="https://material-ui.com/static/images/avatar/1.jpg"
-                />
-              </ListItemIcon>
-              <ListItemText primary="John Wick"></ListItemText>
-            </ListItem>
-          </List>
-          <Divider />
-
-          <List>
-            <ListItem button key="RemySharp">
-              <ListItemIcon>
-                <Avatar
-                  alt="Remy Sharp"
-                  src="https://material-ui.com/static/images/avatar/1.jpg"
-                />
-              </ListItemIcon>
-              <ListItemText primary="Remy Sharp">Remy Sharp</ListItemText>
-              <ListItemText secondary="online" align="right"></ListItemText>
-            </ListItem>
-            <ListItem button key="Alice">
-              <ListItemIcon>
-                <Avatar
-                  alt="Alice"
-                  src="https://material-ui.com/static/images/avatar/3.jpg"
-                />
-              </ListItemIcon>
-              <ListItemText primary="Alice">Alice</ListItemText>
-            </ListItem>
-            <ListItem button key="CindyBaker">
-              <ListItemIcon>
-                <Avatar
-                  alt="Cindy Baker"
-                  src="https://material-ui.com/static/images/avatar/2.jpg"
-                />
-              </ListItemIcon>
-              <ListItemText primary="Cindy Baker">Cindy Baker</ListItemText>
-            </ListItem>
+            {users.map((item, i) => (
+              <Box key={i}>
+                <ListItem button key={item.key} onClick={() => onJoinSuccess()}>
+                  <ListItemIcon>
+                    <Avatar alt="Remy Sharp" src={item.avatar} />
+                  </ListItemIcon>
+                  <ListItemText primary={item.primary} />
+                </ListItem>
+                <Divider />
+              </Box>
+            ))}
           </List>
         </Grid>
-        <Grid item xs={9}>
-          <List sx={{ height: "70vh", overflowY: "auto" }}>
-            <ListItem key="1">
-              <Grid container>
-                <Grid item xs={12}>
-                  <ListItemText
-                    align="right"
-                    primary="Hey man, What's up ?"
-                  ></ListItemText>
-                </Grid>
-                <Grid item xs={12}>
-                  <ListItemText align="right" secondary="09:30"></ListItemText>
-                </Grid>
-              </Grid>
-            </ListItem>
-            <ListItem key="2">
-              <Grid container>
-                <Grid item xs={12}>
-                  <ListItemText
-                    align="left"
-                    primary="Hey, Iam Good! What about you ?"
-                  ></ListItemText>
-                </Grid>
-                <Grid item xs={12}>
-                  <ListItemText align="left" secondary="09:31"></ListItemText>
-                </Grid>
-              </Grid>
-            </ListItem>
-            <ListItem key="3">
-              <Grid container>
-                <Grid item xs={12}>
-                  <ListItemText
-                    align="right"
-                    primary="Cool. i am good, let's catch up!"
-                  ></ListItemText>
-                </Grid>
-                <Grid item xs={12}>
-                  <ListItemText align="right" secondary="10:30"></ListItemText>
-                </Grid>
-              </Grid>
-            </ListItem>
-          </List>
-          <Divider />
-          <Grid
-            container
-            style={{
-              padding: "20px",
-              position: "fixed",
-              bottom: 0,
-              width: "74%",
-            }}
-          >
-            <Grid item xs={11}>
-              <TextField
-                id="outlined-basic-email"
-                label="Type Something"
-                value={message}
-                fullWidth
-                onChange={(e) => setMessage(e.target.value)}
-              />
-            </Grid>
-            <Grid xs={1} align="right">
-              <Fab
-                color="primary"
-                aria-label="add"
-                onClick={() => handleSubmit()}
-              >
-                <SendIcon />
-              </Fab>
-            </Grid>
-          </Grid>
-        </Grid>
+        <Routes>
+          <Route path="/chat/rooms/:roomNumber" element={<ChatRoom />} />
+        </Routes>
       </Grid>
-      {/* </Container> */}
     </>
   );
 };
