@@ -35,7 +35,24 @@ module.exports = ({ env }) => ({
           handler: ({ strapi }, socket) => {
             console.log("SOCKET HI");
 
-            strapi.log.info(`[io] new connection with id ${socket.id}`);
+            strapi.log.info(`[io2] new connection with id ${socket.id}`);
+          },
+        },
+        {
+          name: "join",
+          handler: ({ strapi }, { username, room }, socket) => {
+            console.log("User Connected", username, room);
+
+            strapi.log.info(` ${username} ${room} `);
+            strapi.log.info(`[io] new connection withfdsfds id ${socket.id}`);
+          },
+        },
+        {
+          name: "send-message",
+          handler: ({ strapi }, message, socket) => {
+            console.log("MESSAGE", message, socket);
+
+            strapi.log.info(`[io2] new connection with id ${socket.id}`);
           },
         },
       ],

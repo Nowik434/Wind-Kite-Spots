@@ -53,7 +53,7 @@ function App() {
               <Route path=":spotId" element={<SingleSpot />} />
             </Route>
             <Route path="/profile" element={<Profile />} />
-            <Route path="/friends" element={<Friends />} />
+            <Route path="/friends/*" element={<Friends />} />
           </Route>
           {!currentUser && (
             <>
