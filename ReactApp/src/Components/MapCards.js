@@ -38,6 +38,16 @@ function MapCards({ setActive, activeMarker }) {
           display: "flex",
           alignItems: "center",
           marginTop: "0px",
+          "&::-webkit-scrollbar": {
+            width: 10,
+          },
+          "&::-webkit-scrollbar-track": {
+            backgroundColor: "rgba(0, 0, 0, 0.12)",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: "#6fcf9791",
+            borderRadius: 2,
+          },
         }}
       >
         {spots.map(({ id, attributes: { name, desc, image } }) => (

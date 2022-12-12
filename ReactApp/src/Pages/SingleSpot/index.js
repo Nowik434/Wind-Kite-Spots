@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 // import { getCertificates } from "../../Slices/certificates";
 import { useParams } from "react-router-dom";
 import { createSelector } from "reselect";
+import RentalListItem from "../../Components/RentalListItem";
 
 const UPLOADS_URL = process.env.REACT_APP_UPLOADS_URL;
 
@@ -66,6 +67,17 @@ export default function SingleSpot() {
                 ref={componentRef}
               />
             </div>
+            <Typography
+              variant="h5"
+              align="left"
+              color="text.secondary"
+              paragraph
+            >
+              List of rentals:
+            </Typography>
+            <RentalListItem />
+            <RentalListItem />
+            <RentalListItem />
           </Container>
         </Box>
       )}
