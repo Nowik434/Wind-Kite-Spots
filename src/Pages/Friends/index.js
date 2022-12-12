@@ -105,10 +105,17 @@ const users = [
 ];
 
 const Friends = () => {
+  const [searchInputValue, setSearchInputValue] = useState();
   const [username, setUsername] = useState("Pawel");
   const [room, setRoom] = useState("12");
   const [joinData, setJoinData] = useState({});
   const navigate = useNavigate();
+
+  const filteredUsers = (searchValue) =>
+    users.filter(
+      (user) =>
+        user.primary.toLowerCase().startsWith(searchValue.toLowerCase()) && user
+    );
 
   function onJoinSuccess(data) {
     // setJoinData(data);
@@ -178,6 +185,16 @@ const Friends = () => {
             borderRight: "1px solid #e0e0e0",
             overflowY: "scroll",
             height: "100%",
+            "&::-webkit-scrollbar": {
+              width: 10,
+            },
+            "&::-webkit-scrollbar-track": {
+              backgroundColor: "rgba(0, 0, 0, 0.12)",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "#6fcf9791",
+              borderRadius: 2,
+            },
           }}
         >
           <Grid item xs={12} style={{ padding: "10px" }}>
@@ -186,21 +203,42 @@ const Friends = () => {
               label="Search"
               variant="outlined"
               fullWidth
+              onChange={(e) => setSearchInputValue(e.target.value)}
             />
           </Grid>
           <Divider />
-          <List>
-            {users.map((item, i) => (
-              <Box key={i}>
-                <ListItem button key={item.key} onClick={() => onJoinSuccess()}>
-                  <ListItemIcon>
-                    <Avatar alt="Remy Sharp" src={item.avatar} />
-                  </ListItemIcon>
-                  <ListItemText primary={item.primary} />
-                </ListItem>
-                <Divider />
-              </Box>
-            ))}
+          <List sx={{}}>
+            {searchInputValue
+              ? filteredUsers(searchInputValue).map((item, i) => (
+                  <Box key={i}>
+                    <ListItem
+                      button
+                      key={item.key}
+                      onClick={() => onJoinSuccess()}
+                    >
+                      <ListItemIcon>
+                        <Avatar alt="Remy Sharp" src={item.avatar} />
+                      </ListItemIcon>
+                      <ListItemText primary={item.primary} />
+                    </ListItem>
+                    <Divider />
+                  </Box>
+                ))
+              : users.map((item, i) => (
+                  <Box key={i}>
+                    <ListItem
+                      button
+                      key={item.key}
+                      onClick={() => onJoinSuccess()}
+                    >
+                      <ListItemIcon>
+                        <Avatar alt="Remy Sharp" src={item.avatar} />
+                      </ListItemIcon>
+                      <ListItemText primary={item.primary} />
+                    </ListItem>
+                    <Divider />
+                  </Box>
+                ))}
           </List>
         </Grid>
         <Routes>

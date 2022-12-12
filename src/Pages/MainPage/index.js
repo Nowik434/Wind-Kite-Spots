@@ -129,6 +129,16 @@ export default function MainPage() {
               overflowY: "scroll",
               height: "100%",
               position: "fixed",
+              "&::-webkit-scrollbar": {
+                width: 10,
+              },
+              "&::-webkit-scrollbar-track": {
+                backgroundColor: "rgba(0, 0, 0, 0.12)",
+              },
+              "&::-webkit-scrollbar-thumb": {
+                backgroundColor: "#6fcf9791",
+                borderRadius: 2,
+              },
             }}
           >
             <Typography component="h1" variant="h5">
