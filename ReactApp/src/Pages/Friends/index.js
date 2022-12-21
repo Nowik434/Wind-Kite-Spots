@@ -107,8 +107,8 @@ const users = [
 const Friends = () => {
   const [searchInputValue, setSearchInputValue] = useState();
   const [username, setUsername] = useState("Pawel");
-  const [room, setRoom] = useState("12");
-  const [joinData, setJoinData] = useState({});
+  const [room, setRoom] = useState(12);
+  // const [joinData, setJoinData] = useState({});
   const navigate = useNavigate();
 
   const filteredUsers = (searchValue) =>
@@ -116,50 +116,63 @@ const Friends = () => {
       (user) =>
         user.primary.toLowerCase().startsWith(searchValue.toLowerCase()) && user
     );
-
-  function onJoinSuccess(data) {
-    // setJoinData(data);
-    // setUsername(data.userData.username);
-    // setRoom(data.userData.room);
-    // navigate(`/chat/rooms/${data.userData.room}`);
-    navigate(`/friends/chat/rooms/${10}`);
+  console.log("room outside", room); //Outside room is set as current !!!!!! to fix
+  function onJoinSuccess(item) {
+    // socket.disconnect();
+    if (username === item.key) {
+      console.log("user is the same");
+    } else {
+      console.log("user is different");
+      setUsername(item.key);
+      setRoom(item.key);
+      console.log("vvvvvvv", item);
+      socket.auth = { username };
+      socket.connect();
+      console.log(socket);
+      console.log(socket.id);
+      console.log(socket.auth.username);
+      // setJoinData(data);
+      console.log("room inside", room);
+      // navigate(`/chat/rooms/${data.userData.room}`);
+      navigate(`/friends/chat/rooms/${item.key}`);
+    }
   }
 
-  useEffect(() => {
-    socket.on("connect", () => {
-      console.log("Connected");
-    });
+  // useEffect(() => {
+  //   socket.on("connect", () => {
+  //     console.log("Connected");
+  //   });
 
-    socket.on("disconnect", () => {
-      console.log("disconnect");
-    });
+  //   socket.on("disconnect", () => {
+  //     console.log("disconnect");
+  //   });
 
-    socket.on("join", (socket) => {
-      console.log("join");
-    });
-    socket.on("send-message", (socket) => {
-      console.log("send-message");
-      socket.on("send-message:create", (data) => {
-        console.log(data);
-      });
-    });
+  //   socket.on("join", (socket) => {
+  //     console.log("join");
+  //   });
+  //   socket.on("send-message", (socket) => {
+  //     console.log("send-message");
+  //     socket.on("send-message:create", (data) => {
+  //       console.log(data);
+  //     });
+  //   });
 
-    return () => {
-      socket.off("connect");
-      socket.off("disconnect");
-      socket.off("join");
-    };
-  }, []);
+  //   return () => {
+  //     socket.off("connect");
+  //     socket.off("disconnect");
+  //     socket.off("join");
+  //   };
+  // }, []);
 
-  const onClick = () => {
-    socket.on("connect", () => {
-      socket.on("send-message:update", (data) => {
-        console.log(data);
-      });
-    });
+  // const onClick = () => {
+  //   socket.on("connect", () => {
+  //     socket.on("send-message:update", (data) => {
+  //       console.log(data);
+  //     });
+  //   });
 
-    console.log(socket);
-  };
+  //   console.log(socket);
+  // };
 
   socket.on("connection", (data) => {
     console.log("Welcome event inside JoinRoom", data);
@@ -214,7 +227,7 @@ const Friends = () => {
                     <ListItem
                       button
                       key={item.key}
-                      onClick={() => onJoinSuccess()}
+                      onClick={() => onJoinSuccess(item)}
                     >
                       <ListItemIcon>
                         <Avatar alt="Remy Sharp" src={item.avatar} />
@@ -229,7 +242,7 @@ const Friends = () => {
                     <ListItem
                       button
                       key={item.key}
-                      onClick={() => onJoinSuccess()}
+                      onClick={() => onJoinSuccess(item)}
                     >
                       <ListItemIcon>
                         <Avatar alt="Remy Sharp" src={item.avatar} />
@@ -242,7 +255,10 @@ const Friends = () => {
           </List>
         </Grid>
         <Routes>
-          <Route path="/chat/rooms/:roomNumber" element={<ChatRoom />} />
+          <Route
+            path="/chat/rooms/:roomNumber"
+            element={<ChatRoom username={username} room={room} />}
+          />
         </Routes>
       </Grid>
     </>
