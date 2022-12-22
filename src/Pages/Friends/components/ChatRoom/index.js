@@ -65,7 +65,7 @@ function ChatRoom({ username, room }) {
           let arr = [welcome];
           response.data.map((one, i) => {
             arr = [...arr, one.attributes];
-            setMessages((msgs) => arr); // Storing all Messages in a state variable
+            setMessages((msgs) => arr);
           });
         })
         .catch((e) => console.log(e.message));
@@ -87,9 +87,6 @@ function ChatRoom({ username, room }) {
     });
   }, [username]);
 
-  socket.on("sendMessage", (data) =>
-    console.log("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", data)
-  );
   // TEST SEND MESSAGES SOCKET IO
 
   const handleSubmit = (message) => {
