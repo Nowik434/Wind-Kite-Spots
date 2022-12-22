@@ -17,10 +17,8 @@ module.exports = {
    * run jobs, or perform some special logic.
    */
   bootstrap(/* { strapi } */) {
-    //strapi.server.httpServer is the new update for Strapi V4
     var io = require("socket.io")(strapi.server.httpServer, {
       cors: {
-        // cors setup
         origin: "http://localhost:3000",
         methods: ["GET", "POST"],
         allowedHeaders: ["my-custom-header"],
@@ -55,11 +53,8 @@ module.exports = {
         }
       });
       socket.on("sendMessage", async (data) => {
-        // socket.emit("message", "gfdgfdgfd");
         console.log("data from sendMessage server", data);
-        // Listening for a sendMessage connection
         let strapiData = {
-          // Generating the message data to be stored in Strapi
           data: {
             user: data.user,
             message: data.message,
