@@ -1,8 +1,8 @@
 {
   "name": "Wind Kite Spots",
   "short_name": "Wind Kite Spots",
-  "theme_color": "#6FCF97",
-  "background_color": "#6FCF97",
+  "theme_color": "#6fcf97",
+  "background_color": "#6fcf97",
   "display": "fullscreen",
   "scope": "/",
   "start_url": "/",
