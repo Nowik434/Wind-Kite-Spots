@@ -160,7 +160,6 @@ const AppBarNav = () => {
           <Divider />
           <List>
             {user &&
-              user.user.userRole === "user" &&
               pages.map(({ name, page }) => (
                 <Link to={page} key={page} style={{ textDecoration: "none" }}>
                   <ListItemButton
@@ -183,7 +182,7 @@ const AppBarNav = () => {
                 <ListItemButton>
                   <ListItemIcon>
                     <ManageAccountsIcon sx={{ mr: 1 }} />
-                    Twój Profil
+                    Your Profile
                   </ListItemIcon>
                   <ListItemText />
                 </ListItemButton>
@@ -194,7 +193,7 @@ const AppBarNav = () => {
                 <ListItemButton onClick={() => handleLogout()}>
                   <ListItemIcon>
                     <LogoutIcon sx={{ mr: 1 }} />
-                    Wyloguj
+                    Log Out
                   </ListItemIcon>
                   <ListItemText />
                 </ListItemButton>

@@ -77,6 +77,7 @@ export default function MainPage() {
                 : t.palette.grey[900],
             backgroundSize: "cover",
             backgroundPosition: "center",
+            display: { xs: "none", sm: "block" },
           }}
         >
           <Carousel
@@ -141,10 +142,18 @@ export default function MainPage() {
               },
             }}
           >
-            <Typography component="h1" variant="h5">
+            <Typography
+              component="h1"
+              variant="h5"
+              sx={{ marginTop: { xs: "60px", sm: "0px" } }}
+            >
               Places
             </Typography>
-            <Grid container spacing={2} sx={{ px: 2 }}>
+            <Grid
+              container
+              spacing={2}
+              sx={{ px: 2, textAlign: { xs: "-webkit-center", sm: "inherit" } }}
+            >
               {spots.map(({ id, attributes: { name, desc, image } }) => (
                 <Grid key={id} item xs={12} sm={6} md={4}>
                   <Card
