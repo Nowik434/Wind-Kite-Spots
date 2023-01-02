@@ -14,10 +14,15 @@ import { useSelector } from "react-redux";
 
 const UPLOADS_URL = process.env.REACT_APP_UPLOADS_URL;
 
-function MapCards({ setActive, activeMarker }) {
+function MapCards({ setActive, activeMarker, map }) {
   const spots = useSelector((state) => state.spots);
 
   const mobile = useMediaQuery("(min-width:600px)");
+
+  const setAsActive = (id, lat, lng) => {
+    setActive(id);
+    map.panTo({ lat, lng });
+  };
 
   return (
     <Paper
@@ -71,50 +76,52 @@ function MapCards({ setActive, activeMarker }) {
               }
         }
       >
-        {spots.map(({ id, attributes: { name, desc, image } }) => (
-          <Grid
-            key={id}
-            item
-            xs={12}
-            sm={12}
-            md={12}
-            sx={
-              !mobile && {
-                maxHeight: "320px",
-                minHeight: "320px",
-                minWidth: "200px",
-              }
-            }
-          >
-            <Card
-              id={id}
+        {spots.map(
+          ({ id, attributes: { name, desc, image, latitude, longitude } }) => (
+            <Grid
+              key={id}
+              item
+              xs={12}
+              sm={12}
+              md={12}
               sx={
-                mobile
-                  ? { maxWidth: 345 }
-                  : { marginTop: "16px", maxWidth: 345, height: "275px" }
+                !mobile && {
+                  maxHeight: "320px",
+                  minHeight: "320px",
+                  minWidth: "200px",
+                }
               }
-              onClick={() => setActive(id)}
             >
-              <CardActionArea>
-                <CardMedia
-                  component="img"
-                  height="140"
-                  image={`${UPLOADS_URL}${image.data.attributes.url}`}
-                  alt="green iguana"
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    {name}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {desc}
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
-              <CardActions></CardActions>
-            </Card>
-          </Grid>
-        ))}
+              <Card
+                id={id}
+                sx={
+                  mobile
+                    ? { maxWidth: 345 }
+                    : { marginTop: "16px", maxWidth: 345, height: "275px" }
+                }
+                onClick={() => setAsActive(id, latitude, longitude)}
+              >
+                <CardActionArea>
+                  <CardMedia
+                    component="img"
+                    height="140"
+                    image={`${UPLOADS_URL}${image.data.attributes.url}`}
+                    alt="green iguana"
+                  />
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="div">
+                      {name}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {desc}
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+                <CardActions></CardActions>
+              </Card>
+            </Grid>
+          )
+        )}
       </Grid>
     </Paper>
   );
