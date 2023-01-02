@@ -77,6 +77,9 @@
     },
     "userId": {
       "type": "uid"
+    },
+    "liked": {
+      "type": "json"
     }
   }
 }

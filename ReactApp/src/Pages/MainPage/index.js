@@ -113,7 +113,18 @@ export default function MainPage() {
                   </Typography>
                   <Typography>{item.description}</Typography>
 
-                  <Button className="CheckButton">Check it out!</Button>
+                  <Button
+                    size="large"
+                    variant="contained"
+                    className="CheckButton"
+                    sx={{
+                      color: "#fff",
+                      mt: 3,
+                    }}
+                    onClick={() => navigate("/map")}
+                  >
+                    Check it out!
+                  </Button>
                 </Box>
               </Box>
             ))}

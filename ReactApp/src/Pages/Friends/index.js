@@ -9,6 +9,7 @@ import {
   ListItemText,
   Paper,
   TextField,
+  useMediaQuery,
 } from "@mui/material";
 import React, { useState } from "react";
 import { Routes, useNavigate, Route } from "react-router-dom";
@@ -110,6 +111,8 @@ const Friends = () => {
   const [room, setRoom] = useState(12);
   const navigate = useNavigate();
 
+  const mobile = useMediaQuery("(min-width:600px)");
+
   const filteredUsers = (searchValue) =>
     users.filter(
       (user) =>
@@ -144,31 +147,45 @@ const Friends = () => {
       <Grid
         container
         component={Paper}
-        sx={{
-          borderRadius: "5px",
-          width: "100%",
-          height: "100vh",
-          position: "fixed",
-        }}
+        sx={
+          mobile
+            ? {
+                borderRadius: "5px",
+                width: "100%",
+                height: "100vh",
+                position: "fixed",
+              }
+            : {
+                display: "block",
+              }
+        }
       >
         <Grid
           item
           xs={3}
-          sx={{
-            borderRight: "1px solid #e0e0e0",
-            overflowY: "scroll",
-            height: "100%",
-            "&::-webkit-scrollbar": {
-              width: 10,
-            },
-            "&::-webkit-scrollbar-track": {
-              backgroundColor: "rgba(0, 0, 0, 0.12)",
-            },
-            "&::-webkit-scrollbar-thumb": {
-              backgroundColor: "#6fcf9791",
-              borderRadius: 2,
-            },
-          }}
+          sx={
+            mobile
+              ? {
+                  borderRight: "1px solid #e0e0e0",
+                  overflowY: "scroll",
+                  height: "100%",
+                  "&::-webkit-scrollbar": {
+                    width: 10,
+                  },
+                  "&::-webkit-scrollbar-track": {
+                    backgroundColor: "rgba(0, 0, 0, 0.12)",
+                  },
+                  "&::-webkit-scrollbar-thumb": {
+                    backgroundColor: "#6fcf9791",
+                    borderRadius: 2,
+                  },
+                }
+              : {
+                  display: "block",
+                  width: "100%",
+                  maxWidth: "none",
+                }
+          }
         >
           <Grid item xs={12} style={{ padding: "10px" }}>
             <TextField

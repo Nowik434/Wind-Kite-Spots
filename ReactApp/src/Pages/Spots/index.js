@@ -14,10 +14,13 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import DropdownShareButton from "../../Components/DropdownShareButton";
-import { Fade, Link } from "@mui/material";
+import { CardHeader, Fade, IconButton, Link } from "@mui/material";
 import { useDocumentTitle } from "../../Hooks/useDocumentTitle";
 import { Footer } from "../../Components/Footer";
 import { useNavigate } from "react-router-dom";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { update } from "../../Slices/auth";
 
 const UPLOADS_URL = process.env.REACT_APP_UPLOADS_URL;
 
@@ -29,28 +32,57 @@ export default function Spots() {
 
   const navigate = useNavigate();
 
-  const yourTypes = useSelector((state) =>
-    state.spots.reduce(
-      (unique, item) =>
-        unique.includes(item.attributes.type)
-          ? unique
-          : [...unique, item.attributes.type],
-      []
-    )
-  );
+  // const yourTypes = useSelector((state) =>
+  //   state.spots.reduce(
+  //     (unique, item) =>
+  //       unique.includes(item.attributes.type)
+  //         ? unique
+  //         : [...unique, item.attributes.type],
+  //     []
+  //   )
+  // );
   const spots = useSelector((state) => state.spots);
   const { user } = useSelector((state) => state.auth);
-  const filteredSpots = (type) =>
-    type
-      .map((type) => spots.filter((el) => el.attributes.type === type && el))
-      .flat();
+  const { liked } = useSelector((state) => state.auth.user.user);
 
-  useEffect(() => {
-    if (spots) {
-      dispatch(getSpots(user));
+  const likedFilter = spots.filter(
+    (spot) => liked.indexOf(spot.attributes.name) !== -1
+  );
+  // console.log(
+  //   spots.filter((spot) => liked.indexOf(spot.attributes.name) !== -1)
+  // );
+
+  console.log("Liked Filter", likedFilter);
+
+  // const filteredSpots = (type) =>
+  //   type
+  //     .map((type) => spots.filter((el) => el.attributes.type === type && el))
+  //     .flat();
+
+  // useEffect(() => {
+  //   if (spots) {
+  //     dispatch(getSpots(user));
+  //   }
+  //   setFiltered(filteredSpots(yourTypes));
+  // }, [displaySelected]);
+
+  const addToLikedList = (name) => {
+    console.log(name, liked);
+    let likeList = [];
+    if (liked.includes(name)) {
+      likeList = liked.filter((el) => el !== name);
+    } else {
+      likeList = !liked ? [name] : [...liked, name];
     }
-    setFiltered(filteredSpots(yourTypes));
-  }, [displaySelected]);
+    console.log(likeList);
+    dispatch(
+      update({
+        id: user.user.id,
+        token: user.jwt,
+        payload: { liked: likeList },
+      })
+    );
+  };
 
   return (
     <>
@@ -93,8 +125,10 @@ export default function Spots() {
                 Liked
               </Button>
               <Button
-                variant={displaySelected ? "outlined" : "contained"}
+                variant={"outlined"}
+                // variant={displaySelected ? "outlined" : "contained"}
                 onClick={() => setDisplaySelected(false)}
+                disabled
               >
                 Nerby You
               </Button>
@@ -110,7 +144,7 @@ export default function Spots() {
         <Container sx={{ py: 8 }} maxWidth="md">
           <Grid container spacing={4}>
             {displaySelected &&
-              filtered.map(({ id, attributes }) => (
+              likedFilter.map(({ id, attributes }) => (
                 <Fade key={id} in={true} timeout={400}>
                   <Grid item key={id} xs={12} sm={4} md={4}>
                     <Card
@@ -121,17 +155,30 @@ export default function Spots() {
                         flexDirection: "column",
                       }}
                     >
+                      <CardHeader
+                        action={
+                          <IconButton aria-label="delete" color="primary">
+                            {liked.includes(attributes.name) ? (
+                              <FavoriteIcon sx={{ color: "#ff2323" }} />
+                            ) : (
+                              <FavoriteBorderIcon />
+                            )}
+                          </IconButton>
+                        }
+                        sx={{ position: "absolute" }}
+                        onClick={() => addToLikedList(attributes.name)}
+                      />
                       <CardMedia
                         component="img"
                         alt="zdjęcie"
                         height="140"
                         image={
-                          attributes.src.data
+                          attributes.image.data
                             ? `${UPLOADS_URL}${attributes.image.data.attributes.url}`
                             : null
                         }
                       />
-                      <CardContent>
+                      <CardContent sx={{ flex: "auto" }}>
                         <Typography variant="h5" component="div">
                           {attributes.name}
                         </Typography>
@@ -149,7 +196,12 @@ export default function Spots() {
                           }}
                           target="_blank"
                         >
-                          <Button size="small">More</Button>
+                          <Button
+                            onClick={() => navigate(`/spots/${id}`)}
+                            size="small"
+                          >
+                            More
+                          </Button>
                         </Link>
                       </CardActions>
                     </Card>
@@ -168,6 +220,19 @@ export default function Spots() {
                         flexDirection: "column",
                       }}
                     >
+                      <CardHeader
+                        action={
+                          <IconButton aria-label="delete" color="primary">
+                            {liked.includes(attributes.name) ? (
+                              <FavoriteIcon sx={{ color: "#ff2323" }} />
+                            ) : (
+                              <FavoriteBorderIcon />
+                            )}
+                          </IconButton>
+                        }
+                        sx={{ position: "absolute" }}
+                        onClick={() => addToLikedList(attributes.name)}
+                      />
                       <CardMedia
                         component="img"
                         alt="zdjęcie"

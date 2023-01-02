@@ -5,7 +5,7 @@ export const getSpots = createAsyncThunk("spots", async (user, thunkAPI) => {
   try {
     console.log(user);
     const data = await userService.getSpotsAction(user.jwt);
-    console.log(data);
+    console.log("get spots data", data);
     if (data) {
       localStorage.setItem("spots", JSON.stringify(data.data.data));
     }
@@ -23,7 +23,7 @@ export const addActiveUser = createAsyncThunk(
     try {
       console.log(id, token, payload);
       const data = await userService.addActiveUserAction(id, token, payload);
-      console.log(data);
+      console.log("add active user data", data);
       return data;
     } catch (error) {
       console.error(error.response.data.error);
@@ -49,6 +49,9 @@ const getSpotsSlice = createSlice({
     },
     [getSpots.rejected]: (state, action) => {
       return (state = []);
+    },
+    [addActiveUser.fulfilled]: (state, action) => {
+      console.log(action.payload.data.data);
     },
   },
 });

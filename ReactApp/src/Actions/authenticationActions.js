@@ -67,6 +67,7 @@ export const updateUser = async (id, token, payload) => {
       typeOfEducation: payload.typeOfEducation,
       region: payload.region,
       phone: payload.phone,
+      liked: payload.liked,
     })
     .then((response) => {
       if (token) {
