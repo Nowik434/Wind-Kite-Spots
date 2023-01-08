@@ -14,23 +14,27 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import DropdownShareButton from "../../Components/DropdownShareButton";
-import { CardHeader, Fade, IconButton, Link } from "@mui/material";
+import { CardHeader, Fade, IconButton, Link, Slider } from "@mui/material";
 import { useDocumentTitle } from "../../Hooks/useDocumentTitle";
 import { Footer } from "../../Components/Footer";
 import { useNavigate } from "react-router-dom";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { update } from "../../Slices/auth";
+import RangeSlider from "../../Components/RangeSlider";
 
 const UPLOADS_URL = process.env.REACT_APP_UPLOADS_URL;
 
 export default function Spots() {
   useDocumentTitle("Spots");
-  const [displaySelected, setDisplaySelected] = useState(false);
-  const [filtered, setFiltered] = useState();
+  const [displaySelected, setDisplaySelected] = useState("all");
+  const [filtered, setFiltered] = useState([]);
+  // const [showRangeSlider, setShowRangeSlider] = useState(false);
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
+
+  console.log("filtered", filtered);
 
   // const yourTypes = useSelector((state) =>
   //   state.spots.reduce(
@@ -48,11 +52,32 @@ export default function Spots() {
   const likedFilter = spots.filter(
     (spot) => liked.indexOf(spot.attributes.name) !== -1
   );
-  // console.log(
-  //   spots.filter((spot) => liked.indexOf(spot.attributes.name) !== -1)
-  // );
+
+  // const rangeFilter = (range) => {
+  //   const filteredSpots = spots.filter((spot) => {
+  //     const lat = spot.attributes.latitude;
+  //     const lng = spot.attributes.longitude;
+  //     return (
+  //       lat >= range.minLat &&
+  //       lat <= range.maxLat &&
+  //       lng >= range.minLng &&
+  //       lng <= range.maxLng
+  //     );
+  //   });
+
+  //   return filteredSpots;
+  // };
+
+  const showNerby = () => {
+    setDisplaySelected("nerby");
+    console.log("nerby");
+  };
 
   console.log("Liked Filter", likedFilter);
+  // console.log(
+  //   "Range Filter",
+  //   rangeFilter({ minLat: 50, maxLat: 52, minLng: 21, maxLng: 23 })
+  // );
 
   // const filteredSpots = (type) =>
   //   type
@@ -119,31 +144,35 @@ export default function Spots() {
               justifyContent="center"
             >
               <Button
-                variant={displaySelected ? "contained" : "outlined"}
-                onClick={() => setDisplaySelected(true)}
+                variant={displaySelected === "liked" ? "contained" : "outlined"}
+                onClick={() => setDisplaySelected("liked")}
               >
                 Liked
               </Button>
               <Button
-                variant={"outlined"}
-                // variant={displaySelected ? "outlined" : "contained"}
-                onClick={() => setDisplaySelected(false)}
-                disabled
+                variant={displaySelected === "nerby" ? "contained" : "outlined"}
+                onClick={() => showNerby()}
+                // disabled
               >
                 Nerby You
               </Button>
+
               <Button
-                variant={displaySelected ? "outlined" : "contained"}
-                onClick={() => setDisplaySelected(false)}
+                variant={displaySelected === "all" ? "contained" : "outlined"}
+                onClick={() => setDisplaySelected("all")}
               >
                 All
               </Button>
             </Stack>
+            <RangeSlider
+              setFiltered={setFiltered}
+              displaySelected={displaySelected}
+            />
           </Container>
         </Box>
         <Container sx={{ py: 8 }} maxWidth="md">
           <Grid container spacing={4}>
-            {displaySelected &&
+            {displaySelected === "liked" &&
               likedFilter.map(({ id, attributes }) => (
                 <Fade key={id} in={true} timeout={400}>
                   <Grid item key={id} xs={12} sm={4} md={4}>
@@ -208,8 +237,73 @@ export default function Spots() {
                   </Grid>
                 </Fade>
               ))}
-            {!displaySelected &&
+            {displaySelected === "all" &&
               spots.map(({ id, attributes }) => (
+                <Fade key={id} in={true} timeout={400}>
+                  <Grid item key={id} xs={12} sm={4} md={4}>
+                    <Card
+                      sx={{
+                        height: "100%",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <CardHeader
+                        action={
+                          <IconButton aria-label="delete" color="primary">
+                            {liked.includes(attributes.name) ? (
+                              <FavoriteIcon sx={{ color: "#ff2323" }} />
+                            ) : (
+                              <FavoriteBorderIcon />
+                            )}
+                          </IconButton>
+                        }
+                        sx={{ position: "absolute" }}
+                        onClick={() => addToLikedList(attributes.name)}
+                      />
+                      <CardMedia
+                        component="img"
+                        alt="zdjęcie"
+                        height="140"
+                        image={
+                          attributes.image.data
+                            ? `${UPLOADS_URL}${attributes.image.data.attributes.url}`
+                            : null
+                        }
+                      />
+                      <CardContent sx={{ flex: "auto" }}>
+                        <Typography variant="h5" component="div">
+                          {attributes.name}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {attributes.desc}
+                        </Typography>
+                      </CardContent>
+                      <CardActions>
+                        <DropdownShareButton shareUrl={attributes.share_url} />
+                        <Link
+                          href={attributes.share_url}
+                          style={{
+                            margin: "0px 0px 0px auto",
+                            textDecoration: "none",
+                          }}
+                          target="_blank"
+                        >
+                          <Button
+                            onClick={() => navigate(`/spots/${id}`)}
+                            size="small"
+                          >
+                            More
+                          </Button>
+                        </Link>
+                      </CardActions>
+                    </Card>
+                  </Grid>
+                </Fade>
+              ))}
+            {displaySelected === "nerby" &&
+              filtered.map(({ id, attributes }) => (
                 <Fade key={id} in={true} timeout={400}>
                   <Grid item key={id} xs={12} sm={4} md={4}>
                     <Card

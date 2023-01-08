@@ -14,12 +14,12 @@ export default function PopoverPopupState({ shareUrl }) {
     <a
       key="facebook"
       href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`}
-      style={{ textDecoration: "none"}}
+      style={{ textDecoration: "none" }}
       target="_blank"
     >
       <Button
         startIcon={<FacebookIcon />}
-        sx={{ width: "100%", borderRadius: 0, color: '#4267B2'  }}
+        sx={{ width: "100%", borderRadius: 0, color: "#4267B2" }}
         key="facebook"
       >
         Facebook
@@ -33,7 +33,7 @@ export default function PopoverPopupState({ shareUrl }) {
     >
       <Button
         startIcon={<TwitterIcon />}
-        sx={{ width: "100%", borderRadius: 0, color: '#1DA1F2' }}
+        sx={{ width: "100%", borderRadius: 0, color: "#1DA1F2" }}
         key="twitter"
       >
         Twitter
@@ -47,7 +47,7 @@ export default function PopoverPopupState({ shareUrl }) {
     >
       <Button
         startIcon={<LinkedInIcon />}
-        sx={{ width: "100%", borderRadius: 0, color: '#0e76a8' }}
+        sx={{ width: "100%", borderRadius: 0, color: "#0e76a8" }}
         key="linkedin"
       >
         LinkedIn
@@ -64,7 +64,7 @@ export default function PopoverPopupState({ shareUrl }) {
             startIcon={<ShareIcon />}
             size="small"
           >
-            Podziel się
+            Share
           </Button>
           <Popover
             {...bindPopover(popupState)}
