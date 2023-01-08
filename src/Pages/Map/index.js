@@ -12,6 +12,7 @@ import MapCards from "../../Components/MapCards";
 import StartActivity from "../../Components/StartActivity";
 import { addActiveUser, getSpots } from "../../Slices/spots";
 import { useDispatch, useSelector } from "react-redux";
+import markerLogo from "../../assets/marker.svg";
 
 const GOOGLE_API = process.env.REACT_APP_GOOGLE_MAPS_APIKEY;
 const UPLOADS_URL = process.env.REACT_APP_UPLOADS_URL;
@@ -166,8 +167,10 @@ function Map({ spots }) {
               key={id}
               position={{ lat: latitude, lng: longitude }}
               onClick={() => handleActiveMarker(id, latitude, longitude)}
-              url={"./../../assets/marker.svg"}
-              scale={7}
+              icon={{
+                url: markerLogo,
+                scale: 3,
+              }}
             >
               {activeMarker === id ? (
                 <InfoWindowF onCloseClick={() => handleClose()}>
