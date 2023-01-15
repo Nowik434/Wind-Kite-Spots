@@ -5,14 +5,23 @@ import {
   Marker,
   useJsApiLoader,
 } from "@react-google-maps/api";
-import { Avatar, Fab, Grid, Typography } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  Fab,
+  Grid,
+  IconButton,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { Box } from "@mui/system";
 import MapCards from "../../Components/MapCards";
 import StartActivity from "../../Components/StartActivity";
-import { addActiveUser, getSpots } from "../../Slices/spots";
-import { useDispatch, useSelector } from "react-redux";
+import { updateActiveUser, getSpots } from "../../Slices/spots";
+import { useDispatch } from "react-redux";
 import markerLogo from "../../assets/marker.svg";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const GOOGLE_API = process.env.REACT_APP_GOOGLE_MAPS_APIKEY;
 const UPLOADS_URL = process.env.REACT_APP_UPLOADS_URL;
@@ -89,21 +98,6 @@ function Map({ spots }) {
     [center]
   );
 
-  // const onLoad = useCallback(
-  //   function callback(map) {
-  //     console.log("Onload");
-  //     const bounds = new window.google.maps.LatLngBounds(center);
-
-  //     spots.forEach(({ attributes: { latitude, longitude } }) => {
-  //       bounds.extend({ lat: latitude, lng: longitude });
-  //     });
-  //     map.fitBounds(bounds);
-
-  //     setMap(map);
-  //   },
-  //   [center]
-  // );
-
   const onUnmount = useCallback(function callback(map) {
     console.log("OnUnmount");
     setMap(null);
@@ -115,33 +109,54 @@ function Map({ spots }) {
   };
 
   const handleSubmit = (id) => {
-    console.log(
-      "SUBMITED",
-      user.user.username,
-      spots[id - 1].attributes.activeUsers
+    const activeUsersNames = spots[id - 1].attributes.activeUsers.map(
+      (user) => user.username
     );
 
-    spots[id - 1].attributes.activeUsers.filter((activeUser) =>
-      activeUser.username !== user.user.username
-        ? dispatch(
-            addActiveUser({
-              id: id,
-              token: JSON.parse(localStorage.getItem("user")).jwt,
-              payload: [
-                ...(spots[id - 1].attributes.activeUsers || []),
-                {
-                  username: user.user.username,
-                  firstname: user.user.firstname,
-                  lastname: user.user.lastname,
-                  profileImage: user.user.profileImage,
-                  timestamp: expirationDate,
-                },
-              ],
-            })
-          )
-        : console.log("user exists")
-    );
+    !activeUsersNames.includes(user.user.username)
+      ? dispatch(
+          updateActiveUser({
+            id: id,
+            token: JSON.parse(localStorage.getItem("user")).jwt,
+            payload: [
+              ...(spots[id - 1].attributes.activeUsers || []),
+              {
+                username: user.user.username,
+                firstname: user.user.firstname,
+                lastname: user.user.lastname,
+                profileImage: user.user.profileImage,
+                timestamp: expirationDate,
+              },
+            ],
+          })
+        )
+      : dispatch(
+          updateActiveUser({
+            id: id,
+            token: JSON.parse(localStorage.getItem("user")).jwt,
+            payload: [
+              ...(spots[id - 1].attributes.activeUsers || []).filter(
+                (activeUser) => activeUser.username !== user.user.username
+              ),
+            ],
+          })
+        );
 
+    dispatch(getSpots(user));
+  };
+
+  const handleRemoveSpots = (id) => {
+    dispatch(
+      updateActiveUser({
+        id: id,
+        token: JSON.parse(localStorage.getItem("user")).jwt,
+        payload: [
+          ...(spots[id - 1].attributes.activeUsers || []).filter(
+            (activeUser) => activeUser.username !== user.user.username
+          ),
+        ],
+      })
+    );
     dispatch(getSpots(user));
   };
 
@@ -178,12 +193,29 @@ function Map({ spots }) {
                     <div>{name}</div>
                     <Grid sx={{ display: "flex", flexFlow: "wrap", mt: 1 }}>
                       {activeUsers ? (
-                        Object.keys(activeUsers).map((user, i) => (
-                          <Avatar
-                            alt={`${activeUsers[user].firstname} ${activeUsers[user].lastname}`}
-                            src={UPLOADS_URL + activeUsers[user].profileImage}
-                            sx={{ width: 30, height: 30, m: "4px" }}
-                          />
+                        Object.keys(activeUsers) !== [] &&
+                        Object.keys(activeUsers).map((activeUser, i) => (
+                          <Tooltip
+                            title={activeUsers[activeUser].firstname}
+                            arrow
+                            placement="top"
+                          >
+                            <Avatar
+                              alt={`${activeUsers[activeUser].firstname} ${activeUsers[activeUser].lastname}`}
+                              src={
+                                UPLOADS_URL +
+                                activeUsers[activeUser].profileImage
+                              }
+                              sx={{
+                                width: 30,
+                                height: 30,
+                                m: "4px",
+                                border:
+                                  activeUsers[activeUser].username ===
+                                    user.user.username && "1px solid red",
+                              }}
+                            />
+                          </Tooltip>
                         ))
                       ) : (
                         <Typography
@@ -196,7 +228,43 @@ function Map({ spots }) {
                       )}
                     </Grid>
 
-                    {activityIsOpened ? (
+                    {user.user.username &&
+                    activityIsOpened &&
+                    activeUsers
+                      .map(
+                        (activeUser) =>
+                          activeUser.username === user.user.username
+                      )
+                      .some(Boolean) ? (
+                      <Button
+                        variant="outlined"
+                        sx={{
+                          color: "#e75a5a",
+                          fontSize: 11,
+                          border: "1px solid #e75a5a",
+                          py: 0,
+                          mt: 3,
+                          "&:hover": {
+                            border: "1px solid #ff2c2c",
+                          },
+                        }}
+                        endIcon={
+                          <IconButton aria-label="Remove my activity">
+                            <DeleteIcon
+                              sx={{
+                                color: "#e75a5a",
+                                "&:hover": {
+                                  color: "#ff2c2c",
+                                },
+                              }}
+                            />
+                          </IconButton>
+                        }
+                        onClick={() => handleRemoveSpots(id)}
+                      >
+                        Remove my activity
+                      </Button>
+                    ) : activityIsOpened ? (
                       <>
                         <Grid sx={{ textAlign: "-webkit-center" }}>
                           <StartActivity

@@ -16,13 +16,17 @@ export const getSpots = createAsyncThunk("spots", async (user, thunkAPI) => {
   }
 });
 
-export const addActiveUser = createAsyncThunk(
+export const updateActiveUser = createAsyncThunk(
   "spots/addActiveUser",
   async ({ id, token, payload }, thunkAPI) => {
     console.log(id, token, payload);
     try {
       console.log(id, token, payload);
-      const data = await userService.addActiveUserAction(id, token, payload);
+      const data = await userService.updateActiveUsersAction(
+        id,
+        token,
+        payload
+      );
       console.log("add active user data", data);
       return data;
     } catch (error) {
@@ -50,7 +54,7 @@ const getSpotsSlice = createSlice({
     [getSpots.rejected]: (state, action) => {
       return (state = []);
     },
-    [addActiveUser.fulfilled]: (state, action) => {
+    [updateActiveUser.fulfilled]: (state, action) => {
       console.log(action.payload.data.data);
     },
   },

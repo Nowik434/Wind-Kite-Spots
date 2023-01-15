@@ -1,17 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import MainBanner from "../../assets/main-banner.jpg";
-import { useRememberMe } from "../../Hooks/useRememberMe";
 import { useDocumentTitle } from "../../Hooks/useDocumentTitle";
 import {
   Card,

@@ -37,7 +37,7 @@ export default function StartActivity({ setExpirationDate }) {
   const [duration, setDuration] = useState();
   const mobileView = useMediaQuery("(max-width:600px)");
 
-  const addTime = (duration) => {
+  const addTime = (duration = 1) => {
     console.log(duration);
     switch (duration) {
       case 0:
